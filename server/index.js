@@ -4,6 +4,11 @@ import multer from "multer";
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import path from "path";
+import fs from "fs/promises";
+import os from "os";
+import { randomUUID } from "crypto";
+import { execFile } from "child_process";
+import { promisify } from "util";
 // dotenv.config();
 
 
@@ -12,6 +17,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
+const execFileAsync = promisify(execFile);
 
 dotenv.config({
 
@@ -24,7 +30,7 @@ const PORT = process.env.PORT || 3001;
 const SCENE_CANVAS = { width: 600, height: 400 };
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 8 * 1024 * 1024 }
+  limits: { fileSize: 16 * 1024 * 1024 }
 });
 const aiProvider =
   process.env.AI_PROVIDER ||
@@ -172,6 +178,56 @@ function extractJson(text = "") {
   }
 }
 
+function getUploadExtension(file) {
+  const originalExtension = path.extname(file.originalname || "").toLowerCase();
+  if (originalExtension) return originalExtension;
+  if (file.mimetype === "image/jpeg") return ".jpg";
+  if (file.mimetype === "image/png") return ".png";
+  if (file.mimetype === "image/webp") return ".webp";
+  if (file.mimetype === "image/heic") return ".heic";
+  if (file.mimetype === "image/heif") return ".heif";
+  return "";
+}
+
+function isHeicLike(file) {
+  const extension = getUploadExtension(file);
+  return ["image/heic", "image/heif"].includes(file.mimetype) || [".heic", ".heif"].includes(extension);
+}
+
+async function convertHeicToJpeg(file) {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "embodied-ai-"));
+  const inputPath = path.join(tempDir, `input${getUploadExtension(file) || ".heic"}`);
+  const outputPath = path.join(tempDir, `${randomUUID()}.jpg`);
+
+  try {
+    await fs.writeFile(inputPath, file.buffer);
+    await execFileAsync("/usr/bin/sips", ["-s", "format", "jpeg", inputPath, "--out", outputPath], {
+      timeout: 30000
+    });
+    const buffer = await fs.readFile(outputPath);
+    return { buffer, mimetype: "image/jpeg" };
+  } catch (error) {
+    const friendly = new Error("HEIC/HEIF 图片转换失败。请在 iPhone 照片中导出为 JPEG，或在相机设置中选择“兼容性最佳”。");
+    friendly.statusCode = 400;
+    throw friendly;
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+async function normalizeUploadedImage(file) {
+  if (isHeicLike(file)) return convertHeicToJpeg(file);
+
+  const supportedTypes = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
+  if (!supportedTypes.has(file.mimetype)) {
+    const error = new Error("当前仅支持 JPG、PNG、WEBP、HEIC/HEIF 图片。iPhone 原图建议转换为 JPEG 后上传。");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  return { buffer: file.buffer, mimetype: file.mimetype };
+}
+
 async function analyzeImageWithOpenAI(file, prompt, imageUrl) {
   const response = await openaiClient.responses.create({
     model: visionModel,
@@ -228,8 +284,9 @@ async function analyzeImageWithVisionModel(file) {
     throw error;
   }
 
-  const base64 = file.buffer.toString("base64");
-  const imageUrl = `data:${file.mimetype};base64,${base64}`;
+  const normalizedImage = await normalizeUploadedImage(file);
+  const base64 = normalizedImage.buffer.toString("base64");
+  const imageUrl = `data:${normalizedImage.mimetype};base64,${base64}`;
   const prompt = `
 你是具身智能机器人的视觉感知模块。请识别图片中可见的具体物品，不要只给出笼统场景描述。
 
@@ -779,10 +836,12 @@ app.post("/api/perception", upload.single("image"), async (req, res) => {
       return;
     }
 
-    if (!req.file.mimetype.startsWith("image/")) {
+    const extension = getUploadExtension(req.file);
+    const looksLikeImage = req.file.mimetype.startsWith("image/") || [".heic", ".heif"].includes(extension);
+    if (!looksLikeImage) {
       res.status(400).json({
         success: false,
-        error: "请上传图片文件，例如 jpg、png 或 webp。"
+        error: "请上传图片文件，例如 JPG、PNG、WEBP 或 iPhone HEIC/HEIF。"
       });
       return;
     }

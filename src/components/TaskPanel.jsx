@@ -67,7 +67,7 @@ export default function TaskPanel({
         </span>
         <input
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
           className="sr-only"
           onChange={handleImageChange}
         />
