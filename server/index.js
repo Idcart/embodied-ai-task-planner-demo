@@ -50,7 +50,7 @@ const openaiClient = openaiApiKey
   ? new OpenAI({
       apiKey: openaiApiKey,
       baseURL: openaiBaseURL || undefined,
-      timeout: 60000,
+      timeout: 180000,
       maxRetries: 2
     })
   : null;
@@ -59,7 +59,7 @@ const zhipuClient = zhipuApiKey
   ? new OpenAI({
       apiKey: zhipuApiKey,
       baseURL: zhipuBaseURL,
-      timeout: 60000,
+      timeout: 180000,
       maxRetries: 2
     })
   : null;
@@ -194,20 +194,22 @@ function isHeicLike(file) {
   return ["image/heic", "image/heif"].includes(file.mimetype) || [".heic", ".heif"].includes(extension);
 }
 
-async function convertHeicToJpeg(file) {
+async function convertImageWithSips(inputBuffer, inputExtension = ".jpg") {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "embodied-ai-"));
-  const inputPath = path.join(tempDir, `input${getUploadExtension(file) || ".heic"}`);
+  const inputPath = path.join(tempDir, `input${inputExtension || ".jpg"}`);
   const outputPath = path.join(tempDir, `${randomUUID()}.jpg`);
 
   try {
-    await fs.writeFile(inputPath, file.buffer);
-    await execFileAsync("/usr/bin/sips", ["-s", "format", "jpeg", inputPath, "--out", outputPath], {
-      timeout: 30000
-    });
+    await fs.writeFile(inputPath, inputBuffer);
+    await execFileAsync(
+      "/usr/bin/sips",
+      ["-Z", "1600", "-s", "format", "jpeg", "-s", "formatOptions", "80", inputPath, "--out", outputPath],
+      { timeout: 45000 }
+    );
     const buffer = await fs.readFile(outputPath);
     return { buffer, mimetype: "image/jpeg" };
   } catch (error) {
-    const friendly = new Error("HEIC/HEIF 图片转换失败。请在 iPhone 照片中导出为 JPEG，或在相机设置中选择“兼容性最佳”。");
+    const friendly = new Error("图片预处理失败。请将照片导出为较小的 JPEG/PNG 后再上传。");
     friendly.statusCode = 400;
     throw friendly;
   } finally {
@@ -216,13 +218,17 @@ async function convertHeicToJpeg(file) {
 }
 
 async function normalizeUploadedImage(file) {
-  if (isHeicLike(file)) return convertHeicToJpeg(file);
+  if (isHeicLike(file)) return convertImageWithSips(file.buffer, getUploadExtension(file) || ".heic");
 
   const supportedTypes = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp"]);
   if (!supportedTypes.has(file.mimetype)) {
     const error = new Error("当前仅支持 JPG、PNG、WEBP、HEIC/HEIF 图片。iPhone 原图建议转换为 JPEG 后上传。");
     error.statusCode = 400;
     throw error;
+  }
+
+  if (file.buffer.length > 2 * 1024 * 1024 || file.mimetype !== "image/jpeg") {
+    return convertImageWithSips(file.buffer, getUploadExtension(file) || ".jpg");
   }
 
   return { buffer: file.buffer, mimetype: file.mimetype };
@@ -863,9 +869,23 @@ app.post("/api/perception", upload.single("image"), async (req, res) => {
       summary: `真实视觉模型已识别到 ${result.objects.length} 个具体物体`
     });
   } catch (error) {
+    console.error("Perception error:", {
+      name: error.name,
+      status: error.status,
+      code: error.code,
+      message: error.message
+    });
+
+    const isTimeout =
+      error.name === "TimeoutError" ||
+      error.code === "ETIMEDOUT" ||
+      /timed out|timeout/i.test(error.message || "");
+
     res.status(error.statusCode || 500).json({
       success: false,
-      error: error.message || "图片识别失败，请稍后重试。",
+      error: isTimeout
+        ? "视觉模型请求超时。已建议压缩图片；请重试，或换一张更小/更清晰的 JPG 图片。"
+        : error.message || "图片识别失败，请稍后重试。",
       sceneDescription: "",
       objects: []
     });
