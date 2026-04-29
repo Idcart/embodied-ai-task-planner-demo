@@ -415,14 +415,88 @@ function inferTask(task = "") {
   };
 }
 
-function findObject(objects, type) {
-  return objects.find((object) => object.type === type) || null;
+function inferActionType(task = "") {
+  const normalized = task.trim().toLowerCase();
+  if (/(找|找到|寻找|观察|看看|定位|在哪里|where|find|locate|observe)/.test(normalized)) return "find";
+  if (/(清理|收拾|整理|clean)/.test(normalized)) return "clean";
+  if (/(放进|放入|放到|put|place)/.test(normalized)) return "put_in";
+  if (/(移动|搬|移到|拿到|move)/.test(normalized)) return "move";
+  return "find";
 }
 
-function buildUnderstanding(task, intent, objects) {
-  const targetObject = findObject(objects, intent.targetType);
+function inferDestination(task = "", objects = [], targetObject = null) {
+  const normalized = task.trim().toLowerCase();
+  if (normalized.includes("右上角")) return { destination: "桌子右上角", destinationPosition: { x: 500, y: 70 } };
+  if (normalized.includes("左上角")) return { destination: "桌子左上角", destinationPosition: { x: 80, y: 70 } };
+  if (normalized.includes("右下角")) return { destination: "桌子右下角", destinationPosition: { x: 520, y: 320 } };
+  if (normalized.includes("左下角")) return { destination: "桌子左下角", destinationPosition: { x: 80, y: 320 } };
+
+  const destinationPhrase =
+    normalized.match(/(?:到|至|进|入|放到|放入|移动到)(.+)$/)?.[1]?.trim() || normalized;
+  const destinationObject = objects.find((object) => {
+    const name = String(object.name || "").toLowerCase();
+    const type = String(object.type || "").toLowerCase();
+    if (targetObject?.id && object.id === targetObject.id) return false;
+    return (name && destinationPhrase.includes(name)) || (type && destinationPhrase.includes(type));
+  });
+
+  if (destinationObject) {
+    return {
+      destination: destinationObject.name,
+      destinationType: destinationObject.type,
+      destinationPosition: getObjectPoint(destinationObject)
+    };
+  }
+
+  return { destination: "当前位置", destinationPosition: null };
+}
+
+function matchTaskObject(task = "", objects = []) {
+  const normalized = task.trim().toLowerCase();
+  const objectCandidates = objects.filter((object) => !["table", "desk", "surface", "floor", "wall"].includes(String(object.type || "").toLowerCase()));
+  return (
+    objectCandidates.find((object) => {
+      const name = String(object.name || "").toLowerCase();
+      const type = String(object.type || "").toLowerCase();
+      return (name && normalized.includes(name)) || (type && normalized.includes(type));
+    }) ||
+    objectCandidates.find((object) => {
+      const description = String(object.description || "").toLowerCase();
+      return description && normalized.includes(description);
+    }) ||
+    null
+  );
+}
+
+function inferTaskWithObjects(task = "", objects = []) {
+  const matchedObject = matchTaskObject(task, objects);
+  if (matchedObject) {
+    const actionType = inferActionType(task);
+    const destination = inferDestination(task, objects, matchedObject);
+    return {
+      targetType: matchedObject.type,
+      targetName: matchedObject.name,
+      actionType,
+      destination: actionType === "find" ? "当前位置" : destination.destination,
+      destinationType: destination.destinationType,
+      destinationPosition: actionType === "find" ? null : destination.destinationPosition
+    };
+  }
+
+  return inferTask(task);
+}
+
+function findObject(objects, type, targetName = "") {
+  return (
+    objects.find((object) => object.type === type) ||
+    objects.find((object) => targetName && object.name === targetName) ||
+    null
+  );
+}
+
+function buildUnderstanding(task, intent, objects, targetObject = null) {
   const needsDestination = ["move", "put_in", "clean"].includes(intent.actionType);
-  const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType) : null;
+  const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType, intent.destination) : null;
   const hasDestination = Boolean(destinationObject || intent.destinationPosition || intent.actionType === "find");
   const lowConfidenceObjects = objects.filter((object) => object.confidence < 0.86);
 
@@ -438,10 +512,12 @@ function buildUnderstanding(task, intent, objects) {
     preconditions: [
       "场景感知结果已生成",
       `目标对象${targetObject ? "已定位" : "需要重新感知确认"}`,
+      targetObject?.operable === false && needsDestination ? "目标对象不适合移动或抓取" : "目标操作性已评估",
       needsDestination ? `目标位置${hasDestination ? "已解析" : "需要用户补充"}` : "该任务不需要移动目标位置"
     ],
     risks: [
       ...(!targetObject && intent.actionType !== "clean" ? ["未找到目标物体，无法直接执行抓取或移动"] : []),
+      ...(targetObject?.operable === false && needsDestination ? [`${targetObject.name}不适合被机器人移动或抓取，建议改为观察/定位任务`] : []),
       ...(needsDestination && !hasDestination ? ["目标位置不明确，可能导致放置失败"] : []),
       ...(lowConfidenceObjects.length ? [`${lowConfidenceObjects.map((item) => item.name).join("、")}置信度偏低，建议执行前复核`] : []),
       "当前 Demo 未接真实机械臂碰撞检测，避障为规则模拟"
@@ -478,10 +554,10 @@ function makeFailure(reason, suggestion, intent, understanding) {
 }
 
 function buildPlan(task, objects) {
-  const intent = inferTask(task);
-  const targetObject = findObject(objects, intent.targetType);
-  const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType) : null;
-  const understanding = buildUnderstanding(task, intent, objects);
+  const intent = inferTaskWithObjects(task, objects);
+  const targetObject = findObject(objects, intent.targetType, intent.targetName);
+  const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType, intent.destination) : null;
+  const understanding = buildUnderstanding(task, intent, objects, targetObject);
   const destinationPosition =
     (destinationObject ? getObjectPoint(destinationObject) : null) || intent.destinationPosition || null;
 
@@ -490,6 +566,15 @@ function buildPlan(task, objects) {
     return makeFailure(
       "未找到目标物体",
       `请重新上传/识别图片，或把任务中的目标对象改为当前已识别物体：${detectedNames}`,
+      intent,
+      understanding
+    );
+  }
+
+  if (targetObject?.operable === false && ["move", "put_in"].includes(intent.actionType)) {
+    return makeFailure(
+      "目标物体不适合操作",
+      `${targetObject.name}被识别为不适合移动或抓取。建议改成“找到${targetObject.name}”或“观察${targetObject.name}”。`,
       intent,
       understanding
     );
