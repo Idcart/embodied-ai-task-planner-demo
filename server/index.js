@@ -37,7 +37,7 @@ const zhipuBaseURL =
 const openaiBaseURL = process.env.OPENAI_BASE_URL;
 const visionModel =
   aiProvider === "zhipu"
-    ? process.env.ZHIPUAI_MODEL || process.env.ZHIPU_VISION_MODEL || "glm-4v-flash"
+    ? process.env.ZHIPUAI_MODEL || process.env.ZHIPU_VISION_MODEL || "glm-4.5v"
     : process.env.OPENAI_VISION_MODEL || "gpt-4.1-mini";
 
 const openaiClient = openaiApiKey
@@ -189,15 +189,27 @@ async function analyzeImageWithOpenAI(file, prompt, imageUrl) {
   return response.output_text || "";
 }
 
-async function analyzeImageWithZhipu(file, prompt, imageUrl) {
+function ensureZhipuVisionModel() {
+  if (!visionModel.toLowerCase().includes("v")) {
+    const error = new Error(
+      `当前智谱模型 ${visionModel} 不支持图片输入，请在 .env 中将 ZHIPUAI_MODEL 改为视觉模型，例如 glm-4.5v 或 glm-4v-flash。`
+    );
+    error.statusCode = 400;
+    throw error;
+  }
+}
+
+async function analyzeImageWithZhipu(file, prompt, base64Image) {
+  ensureZhipuVisionModel();
+
   const response = await zhipuClient.chat.completions.create({
     model: visionModel,
     messages: [
       {
         role: "user",
         content: [
-          { type: "text", text: prompt },
-          { type: "image_url", image_url: { url: imageUrl } }
+          { type: "image_url", image_url: { url: base64Image } },
+          { type: "text", text: prompt }
         ]
       }
     ],
@@ -254,7 +266,7 @@ async function analyzeImageWithVisionModel(file) {
 
   const modelText =
     aiProvider === "zhipu"
-      ? await analyzeImageWithZhipu(file, prompt, imageUrl)
+      ? await analyzeImageWithZhipu(file, prompt, base64)
       : await analyzeImageWithOpenAI(file, prompt, imageUrl);
   const parsed = extractJson(modelText);
   const objects = Array.isArray(parsed.objects) ? parsed.objects.map(normalizeVisionObject) : [];

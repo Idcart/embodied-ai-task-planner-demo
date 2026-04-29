@@ -41,7 +41,7 @@ npm run dev
 ```bash
 AI_PROVIDER=zhipu
 ZHIPUAI_API_KEY=你的智谱 key
-ZHIPUAI_MODEL=glm-4v-flash
+ZHIPUAI_MODEL=glm-4.5v
 ZHIPUAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4
 ```
 
