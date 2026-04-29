@@ -43,6 +43,8 @@ AI_PROVIDER=zhipu
 ZHIPUAI_API_KEY=你的智谱 key
 ZHIPUAI_MODEL=glm-4.6v
 ZHIPUAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+VISION_IMAGE_MAX_SIZE=1024
+VISION_IMAGE_QUALITY=75
 ```
 
 启动后访问：

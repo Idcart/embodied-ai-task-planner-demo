@@ -45,6 +45,8 @@ const visionModel =
   aiProvider === "zhipu"
     ? process.env.ZHIPUAI_MODEL || process.env.ZHIPU_VISION_MODEL || "glm-4.5v"
     : process.env.OPENAI_VISION_MODEL || "gpt-4.1-mini";
+const visionImageMaxSize = Number(process.env.VISION_IMAGE_MAX_SIZE || 1024);
+const visionImageQuality = String(process.env.VISION_IMAGE_QUALITY || 75);
 
 const openaiClient = openaiApiKey
   ? new OpenAI({
@@ -66,6 +68,7 @@ const zhipuClient = zhipuApiKey
 
 console.log("AI_PROVIDER:", aiProvider);
 console.log("VISION_MODEL:", visionModel);
+console.log("VISION_IMAGE_MAX_SIZE:", visionImageMaxSize);
 console.log("VISION_API_KEY loaded:", aiProvider === "zhipu" ? !!zhipuApiKey : !!openaiApiKey);
 
 
@@ -203,7 +206,19 @@ async function convertImageWithSips(inputBuffer, inputExtension = ".jpg") {
     await fs.writeFile(inputPath, inputBuffer);
     await execFileAsync(
       "/usr/bin/sips",
-      ["-Z", "1600", "-s", "format", "jpeg", "-s", "formatOptions", "80", inputPath, "--out", outputPath],
+      [
+        "-Z",
+        String(visionImageMaxSize),
+        "-s",
+        "format",
+        "jpeg",
+        "-s",
+        "formatOptions",
+        visionImageQuality,
+        inputPath,
+        "--out",
+        outputPath
+      ],
       { timeout: 45000 }
     );
     const buffer = await fs.readFile(outputPath);
@@ -227,11 +242,7 @@ async function normalizeUploadedImage(file) {
     throw error;
   }
 
-  if (file.buffer.length > 2 * 1024 * 1024 || file.mimetype !== "image/jpeg") {
-    return convertImageWithSips(file.buffer, getUploadExtension(file) || ".jpg");
-  }
-
-  return { buffer: file.buffer, mimetype: file.mimetype };
+  return convertImageWithSips(file.buffer, getUploadExtension(file) || ".jpg");
 }
 
 async function analyzeImageWithOpenAI(file, prompt, imageUrl) {
@@ -324,7 +335,8 @@ async function analyzeImageWithVisionModel(file) {
 5. xPercent、yPercent 是物体中心点在图片中的大致百分比坐标，范围 0 到 100。
 6. confidence 范围 0 到 1。
 7. operable 表示是否适合被机器人移动或操作。
-8. 最多返回 12 个主要物体，忽略背景墙面、桌面本身这类不可操作大背景。
+8. 最多返回 8 个主要物体，优先选择最清晰、最适合机器人操作或定位的物品，忽略背景墙面、桌面本身这类不可操作大背景。
+9. 图片内容很多时，不要穷举全部细节，只输出对任务规划最有用的主要物体。
 `;
 
   const modelText =
