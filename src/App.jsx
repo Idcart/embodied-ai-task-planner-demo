@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import LogPanel from "./components/LogPanel";
 import PerceptionPanel from "./components/PerceptionPanel";
 import PlanPanel from "./components/PlanPanel";
-import SceneBoard from "./components/SceneBoard";
+import EmbodiedWorld3D from "./components/EmbodiedWorld3D";
 import TaskPanel from "./components/TaskPanel";
 import { executePlan, generatePlan, runPerception } from "./lib/api";
 import { initialRobot } from "./lib/constants";
@@ -204,7 +204,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#edf2f7] text-ink">
       <Header />
-      <main className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-5 py-5 xl:grid-cols-[390px_1fr_390px]">
+      <main className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-5 py-5 xl:grid-cols-[390px_1fr]">
         <div className="space-y-4">
           <TaskPanel
             task={task}
@@ -243,16 +243,18 @@ export default function App() {
               />
             </div>
           </div>
-          <SceneBoard
+          <EmbodiedWorld3D
             objects={objects}
             robot={robot}
             activeObjectId={activeObjectId}
             heldObjectId={heldObjectId}
             movedObjects={movedObjects}
+            plan={plan}
+            currentStep={currentStep}
           />
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 xl:col-span-2 xl:grid xl:grid-cols-[1fr_390px] xl:gap-4 xl:space-y-0">
           <PlanPanel
             intent={intent}
             understanding={understanding}

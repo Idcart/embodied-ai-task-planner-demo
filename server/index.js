@@ -32,19 +32,29 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 16 * 1024 * 1024 }
 });
-const aiProvider =
+const configuredAiProvider =
   process.env.AI_PROVIDER ||
-  (process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY ? "zhipu" : "openai");
+  (process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY
+    ? "zhipu"
+    : process.env.XIAOMI_API_KEY || process.env.XIAOMI_MIMO_API_KEY || process.env.MIMO_API_KEY
+      ? "mimo"
+      : "openai");
+const aiProvider = configuredAiProvider === "xiaomi" ? "mimo" : configuredAiProvider;
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
 const zhipuApiKey = process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY;
 const zhipuBaseURL =
   process.env.ZHIPUAI_BASE_URL || process.env.ZHIPU_BASE_URL || "https://open.bigmodel.cn/api/paas/v4";
+const mimoApiKey = process.env.XIAOMI_API_KEY || process.env.XIAOMI_MIMO_API_KEY || process.env.MIMO_API_KEY;
+const mimoBaseURL =
+  process.env.XIAOMI_MIMO_BASE_URL || process.env.MIMO_BASE_URL || process.env.XIAOMI_BASE_URL || "https://api.xiaomimimo.com/v1";
 const openaiBaseURL = process.env.OPENAI_BASE_URL;
 const visionModel =
   aiProvider === "zhipu"
     ? process.env.ZHIPUAI_MODEL || process.env.ZHIPU_VISION_MODEL || "glm-4.5v"
-    : process.env.OPENAI_VISION_MODEL || "gpt-4.1-mini";
+    : aiProvider === "mimo"
+      ? process.env.XIAOMI_MIMO_MODEL || process.env.MIMO_MODEL || process.env.XIAOMI_VISION_MODEL || "mimo-v2-omni"
+      : process.env.OPENAI_VISION_MODEL || "gpt-4.1-mini";
 const visionImageMaxSize = Number(process.env.VISION_IMAGE_MAX_SIZE || 1024);
 const visionImageQuality = String(process.env.VISION_IMAGE_QUALITY || 75);
 
@@ -66,10 +76,22 @@ const zhipuClient = zhipuApiKey
     })
   : null;
 
+const mimoClient = mimoApiKey
+  ? new OpenAI({
+      apiKey: mimoApiKey,
+      baseURL: mimoBaseURL,
+      timeout: 180000,
+      maxRetries: 2
+    })
+  : null;
+
 console.log("AI_PROVIDER:", aiProvider);
 console.log("VISION_MODEL:", visionModel);
 console.log("VISION_IMAGE_MAX_SIZE:", visionImageMaxSize);
-console.log("VISION_API_KEY loaded:", aiProvider === "zhipu" ? !!zhipuApiKey : !!openaiApiKey);
+console.log(
+  "VISION_API_KEY loaded:",
+  aiProvider === "zhipu" ? !!zhipuApiKey : aiProvider === "mimo" ? !!mimoApiKey : !!openaiApiKey
+);
 
 
 app.use(cors());
@@ -97,11 +119,24 @@ function percentToScenePoint(position = {}) {
 function addConsistentBbox(object) {
   const size = getBoxSize(object.type);
   const scenePoint = percentToScenePoint(object.position);
+  const xPercent =
+    typeof object.position?.xPercent === "number"
+      ? object.position.xPercent
+      : Number(((scenePoint.x / SCENE_CANVAS.width) * 100).toFixed(2));
+  const yPercent =
+    typeof object.position?.yPercent === "number"
+      ? object.position.yPercent
+      : Number(((scenePoint.y / SCENE_CANVAS.height) * 100).toFixed(2));
   const centerX = (scenePoint.x / SCENE_CANVAS.width) * 100;
   const centerY = (scenePoint.y / SCENE_CANVAS.height) * 100;
 
   return {
     ...object,
+    position: {
+      ...object.position,
+      xPercent,
+      yPercent
+    },
     scenePosition: scenePoint,
     bbox: {
       x: Number(Math.max(1, Math.min(96 - size.width, centerX - size.width / 2)).toFixed(2)),
@@ -292,10 +327,29 @@ async function analyzeImageWithZhipu(file, prompt, base64Image) {
   return response.choices?.[0]?.message?.content || "";
 }
 
+async function analyzeImageWithMimo(file, prompt, base64Image) {
+  const response = await mimoClient.chat.completions.create({
+    model: visionModel,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "image_url", image_url: { url: base64Image } },
+          { type: "text", text: prompt }
+        ]
+      }
+    ],
+    temperature: 0.2
+  });
+
+  return response.choices?.[0]?.message?.content || "";
+}
+
 async function analyzeImageWithVisionModel(file) {
-  const client = aiProvider === "zhipu" ? zhipuClient : openaiClient;
+  const client = aiProvider === "zhipu" ? zhipuClient : aiProvider === "mimo" ? mimoClient : openaiClient;
   if (!client) {
-    const requiredKey = aiProvider === "zhipu" ? "ZHIPUAI_API_KEY" : "OPENAI_API_KEY";
+    const requiredKey =
+      aiProvider === "zhipu" ? "ZHIPUAI_API_KEY" : aiProvider === "mimo" ? "XIAOMI_API_KEY" : "OPENAI_API_KEY";
     const error = new Error(`缺少 ${requiredKey}，请先在 .env 中配置后再识别真实图片。`);
     error.statusCode = 503;
     throw error;
@@ -342,6 +396,8 @@ async function analyzeImageWithVisionModel(file) {
   const modelText =
     aiProvider === "zhipu"
       ? await analyzeImageWithZhipu(file, prompt, base64)
+      : aiProvider === "mimo"
+        ? await analyzeImageWithMimo(file, prompt, imageUrl)
       : await analyzeImageWithOpenAI(file, prompt, imageUrl);
   const parsed = extractJson(modelText);
   const objects = Array.isArray(parsed.objects) ? parsed.objects.map(normalizeVisionObject) : [];

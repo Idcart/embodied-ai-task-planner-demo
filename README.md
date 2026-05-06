@@ -36,13 +36,24 @@ cp .env.example .env
 npm run dev
 ```
 
-`.env` 支持 OpenAI 或智谱二选一。智谱示例：
+`.env` 支持 OpenAI、智谱或小米 MiMo 三选一。智谱示例：
 
 ```bash
 AI_PROVIDER=zhipu
 ZHIPUAI_API_KEY=你的智谱 key
 ZHIPUAI_MODEL=glm-4.6v
 ZHIPUAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+VISION_IMAGE_MAX_SIZE=1024
+VISION_IMAGE_QUALITY=75
+```
+
+小米 MiMo 示例：
+
+```bash
+AI_PROVIDER=mimo
+XIAOMI_API_KEY=你的小米 MiMo token
+XIAOMI_MIMO_MODEL=mimo-v2-omni
+XIAOMI_MIMO_BASE_URL=https://api.xiaomimimo.com/v1
 VISION_IMAGE_MAX_SIZE=1024
 VISION_IMAGE_QUALITY=75
 ```
@@ -152,7 +163,7 @@ multipart/form-data
 
 1. 前端通过 `multipart/form-data` 上传图片。
 2. 后端使用 `multer` 接收图片并转成 base64 data URL。
-3. 后端调用 OpenAI 或智谱视觉模型。
+3. 后端调用 OpenAI、智谱或小米 MiMo 视觉模型。
 4. 后端解析模型返回 JSON，并转换为统一物体结构。
 
 ```json

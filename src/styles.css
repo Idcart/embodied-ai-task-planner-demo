@@ -47,6 +47,41 @@ button:disabled {
   animation: robotPulse 2.4s ease-in-out infinite;
 }
 
+.world-label {
+  display: inline-flex;
+  max-width: 132px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.78);
+  color: #ecfeff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.15;
+  padding: 4px 7px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.24);
+}
+
+.world-label-active,
+.step-label {
+  border-color: rgba(251, 191, 36, 0.75);
+  background: rgba(120, 53, 15, 0.78);
+  color: #fffbeb;
+}
+
+.robot-label {
+  border-color: rgba(34, 211, 238, 0.7);
+  background: rgba(8, 47, 73, 0.82);
+}
+
+.zone-label {
+  border-color: rgba(45, 212, 191, 0.64);
+  background: rgba(19, 78, 74, 0.72);
+}
+
 @keyframes robotPulse {
   0%,
   100% {
