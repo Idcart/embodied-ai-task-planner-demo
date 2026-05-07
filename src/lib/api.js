@@ -1,7 +1,12 @@
 const headers = { "Content-Type": "application/json" };
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "/api").replace(/\/$/, "");
+
+function apiUrl(path) {
+  return `${API_BASE_URL}${path.startsWith("/") ? path : `/${path}`}`;
+}
 
 async function postJson(url, payload) {
-  const response = await fetch(url, {
+  const response = await fetch(apiUrl(url), {
     method: "POST",
     headers,
     body: JSON.stringify(payload)
@@ -19,7 +24,7 @@ export function runPerception(payload) {
     const formData = new FormData();
     formData.append("image", payload.imageFile);
 
-    return fetch("/api/perception", {
+    return fetch(apiUrl("/perception"), {
       method: "POST",
       body: formData
     }).then(async (response) => {
@@ -31,14 +36,14 @@ export function runPerception(payload) {
     });
   }
 
-  return postJson("/api/perception", payload);
+  return postJson("/perception", payload);
 }
 
 export function runLiveFramePerception(imageBlob) {
   const formData = new FormData();
   formData.append("image", imageBlob, "camera-frame.jpg");
 
-  return fetch("/api/perception/live-frame", {
+  return fetch(apiUrl("/perception/live-frame"), {
     method: "POST",
     body: formData
   }).then(async (response) => {
@@ -51,15 +56,15 @@ export function runLiveFramePerception(imageBlob) {
 }
 
 export function generatePlan(payload) {
-  return postJson("/api/plan", payload);
+  return postJson("/plan", payload);
 }
 
 export function executePlan(payload) {
-  return postJson("/api/execute", payload);
+  return postJson("/execute", payload);
 }
 
 export function getHardwareStatus() {
-  return fetch("/api/hardware/status").then(async (response) => {
+  return fetch(apiUrl("/hardware/status")).then(async (response) => {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
       throw new Error(data.error || `请求失败：${response.status}`);
@@ -69,9 +74,9 @@ export function getHardwareStatus() {
 }
 
 export function executeHardwareStep(payload) {
-  return postJson("/api/hardware/execute-step", payload);
+  return postJson("/hardware/execute-step", payload);
 }
 
 export function executeHardwarePlan(payload) {
-  return postJson("/api/hardware/execute-plan", payload);
+  return postJson("/hardware/execute-plan", payload);
 }

@@ -144,6 +144,24 @@ VISION_IMAGE_QUALITY=75
 PORT=3001
 ```
 
+生产环境建议补充：
+
+```bash
+NODE_ENV=production
+PORT=3001
+CLIENT_ORIGIN=https://your-domain.com
+VITE_API_BASE_URL=https://your-domain.com/api
+UPLOAD_MAX_FILE_SIZE_MB=10
+```
+
+本地开发默认：
+
+```bash
+VITE_API_BASE_URL=/api
+VITE_DEV_API_TARGET=http://localhost:3001
+CLIENT_ORIGIN=http://localhost:5173,http://127.0.0.1:5173
+```
+
 ## 演示流程
 
 ### 图片识别流程
@@ -340,6 +358,250 @@ src/executors/
 }
 ```
 
+## 公网部署
+
+推荐使用 Ubuntu 22.04 + Nginx + PM2。部署前确认：
+
+- `.env` 已加入 `.gitignore`，不要提交 API Key。
+- 后端端口默认 `3001`，通过 `PORT` 环境变量调整。
+- 前端生产构建使用 `VITE_API_BASE_URL` 指向公网 API。
+- 摄像头功能在公网通常要求 HTTPS，IP + HTTP 下可能无法打开摄像头。
+
+### 方案 A：前后端分离部署，推荐
+
+架构：
+
+```text
+Browser -> Nginx
+  /      -> /var/www/embodied-ai-demo/dist
+  /api   -> http://127.0.0.1:3001
+```
+
+部署步骤：
+
+```bash
+# 1. 安装基础环境
+sudo apt update
+sudo apt install -y nginx git curl
+
+# 2. 安装 Node.js LTS
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+node -v
+npm -v
+
+# 3. 安装 PM2
+sudo npm install -g pm2
+
+# 4. 克隆项目
+sudo mkdir -p /var/www
+cd /var/www
+sudo git clone <你的 GitHub 仓库地址> embodied-ai-demo
+sudo chown -R $USER:$USER /var/www/embodied-ai-demo
+cd /var/www/embodied-ai-demo
+
+# 5. 安装依赖
+npm install
+
+# 6. 配置环境变量
+cp .env.example .env
+nano .env
+```
+
+生产 `.env` 示例：
+
+```bash
+NODE_ENV=production
+PORT=3001
+CLIENT_ORIGIN=https://your-domain.com
+VITE_API_BASE_URL=https://your-domain.com/api
+UPLOAD_MAX_FILE_SIZE_MB=10
+
+AI_PROVIDER=zhipu
+ZHIPUAI_API_KEY=你的 key
+ZHIPUAI_MODEL=glm-4.6v
+ZHIPUAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+VISION_IMAGE_MAX_SIZE=1024
+VISION_IMAGE_QUALITY=75
+```
+
+如果暂时使用你的公网 IP `8.136.17.44` 通过 HTTP 访问，可先这样配置：
+
+```bash
+NODE_ENV=production
+PORT=3001
+CLIENT_ORIGIN=http://8.136.17.44
+VITE_API_BASE_URL=http://8.136.17.44/api
+UPLOAD_MAX_FILE_SIZE_MB=10
+```
+
+注意：IP + HTTP 适合先验证页面、3D、图片上传和 API；摄像头 `getUserMedia` 通常需要 HTTPS 或 localhost，正式演示建议后续绑定域名并配置 HTTPS。
+
+构建并启动：
+
+```bash
+npm run build
+pm2 start ecosystem.config.cjs
+pm2 logs embodied-ai-demo-api
+pm2 save
+pm2 startup
+```
+
+Nginx HTTPS 配置示例：
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    # 配好证书后建议将 HTTP 跳转 HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+
+    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+
+    root /var/www/embodied-ai-demo/dist;
+    index index.html;
+
+    client_max_body_size 10m;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:3001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 180s;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+暂时没有域名时，可以先用 IP + HTTP。你的服务器 IP 是 `8.136.17.44`，Nginx 可先这样配置：
+
+```nginx
+server {
+    listen 80;
+    server_name 8.136.17.44;
+
+    root /var/www/embodied-ai-demo/dist;
+    index index.html;
+
+    client_max_body_size 10m;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:3001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 180s;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+```
+
+启用 Nginx：
+
+```bash
+sudo nano /etc/nginx/sites-available/embodied-ai-demo
+sudo ln -s /etc/nginx/sites-available/embodied-ai-demo /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+开放防火墙：
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw enable
+sudo ufw status
+```
+
+验证：
+
+```bash
+curl http://127.0.0.1:3001/api/health
+curl http://8.136.17.44/api/health
+curl https://your-domain.com/api/health
+```
+
+浏览器访问：
+
+```text
+http://8.136.17.44/
+https://your-domain.com/
+```
+
+### 方案 B：Express 托管前端 dist
+
+当前后端已支持在 `NODE_ENV=production` 且存在 `dist/` 时托管前端静态资源。
+
+使用方式：
+
+```bash
+npm install
+cp .env.example .env
+npm run build
+NODE_ENV=production npm start
+```
+
+如果用 PM2：
+
+```bash
+pm2 start ecosystem.config.cjs
+pm2 logs embodied-ai-demo-api
+```
+
+此方案可以让用户直接访问：
+
+```text
+http://服务器IP:3001/
+```
+
+但正式公网演示仍建议使用 Nginx + HTTPS，尤其是摄像头功能。
+
+## PM2 管理命令
+
+```bash
+pm2 start ecosystem.config.cjs
+pm2 restart embodied-ai-demo-api
+pm2 logs embodied-ai-demo-api
+pm2 status
+pm2 save
+```
+
+## 摄像头公网注意事项
+
+- 浏览器 `navigator.mediaDevices.getUserMedia` 通常只允许在 `localhost` 或 HTTPS 环境使用。
+- 如果使用公网 IP + HTTP，摄像头按钮可能无法打开权限弹窗。
+- 正式演示建议配置域名和 HTTPS。
+- 如果只是测试后端接口，可以先使用 IP + HTTP。
+
+## 生产安全注意事项
+
+- `.env` 必须保留在服务器，不提交 GitHub。
+- API Key 只能从环境变量读取，不能写死在代码里。
+- `CLIENT_ORIGIN` 应设置为实际域名，不要在公网随意放开所有来源。
+- `UPLOAD_MAX_FILE_SIZE_MB` 建议保持 10MB 或更低。
+- Hardware 模式当前默认未连接实体设备，会阻止真实执行。
+- 未来接入真实设备前，应增加硬件确认、急停、鉴权、速率限制和操作审计。
+
 ## 当前版本验证结果
 
 本次整理已验证：
@@ -368,6 +630,77 @@ npm run build
 - 当前没有真实碰撞检测、机械臂逆解、夹爪反馈或设备状态闭环。
 - 3D 模拟主要用于演示 Agent 流程，不等价于真实机器人控制系统。
 - 前端 bundle 较大，后续如需上线可考虑对 Three.js 相关模块做代码拆分。
+
+## 常见问题
+
+### 前端打开空白
+
+先检查构建产物和 Nginx root 是否正确：
+
+```bash
+npm run build
+ls dist
+sudo nginx -t
+```
+
+如果使用 React 前端路由，Nginx 必须配置：
+
+```nginx
+try_files $uri $uri/ /index.html;
+```
+
+### API 请求失败
+
+检查 `VITE_API_BASE_URL` 是否正确。前后端分离部署一般为：
+
+```bash
+VITE_API_BASE_URL=https://your-domain.com/api
+```
+
+同时检查：
+
+```bash
+curl https://your-domain.com/api/health
+pm2 logs embodied-ai-demo-api
+```
+
+### CORS 报错
+
+检查后端 `.env`：
+
+```bash
+CLIENT_ORIGIN=https://your-domain.com
+```
+
+如果本地开发：
+
+```bash
+CLIENT_ORIGIN=http://localhost:5173,http://127.0.0.1:5173
+```
+
+### 摄像头打不开
+
+公网环境需要 HTTPS。IP + HTTP 通常无法使用摄像头权限。
+
+### 上传图片失败
+
+检查 Nginx 和后端上传大小：
+
+```nginx
+client_max_body_size 10m;
+```
+
+```bash
+UPLOAD_MAX_FILE_SIZE_MB=10
+```
+
+### OpenAI / 智谱 / MiMo API Key 未配置
+
+真实图片或摄像头识别需要模型 key。检查 `.env` 中的 `AI_PROVIDER` 和对应 key。
+
+### 服务器端口未开放
+
+如果使用 Nginx，只需要开放 80/443。后端 3001 可以只监听本机代理，不建议直接暴露公网。
 
 ## 后续计划
 

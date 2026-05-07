@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 import path from "path";
 import fs from "fs/promises";
+import fsSync from "fs";
 import os from "os";
 import { randomUUID } from "crypto";
 import { execFile } from "child_process";
@@ -27,10 +28,16 @@ dotenv.config({
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || "development";
+const uploadMaxFileSizeMb = Number(process.env.UPLOAD_MAX_FILE_SIZE_MB || 10);
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173,http://127.0.0.1:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const SCENE_CANVAS = { width: 600, height: 400 };
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 16 * 1024 * 1024 }
+  limits: { fileSize: uploadMaxFileSizeMb * 1024 * 1024 }
 });
 const configuredAiProvider =
   process.env.AI_PROVIDER ||
@@ -94,7 +101,23 @@ console.log(
 );
 
 
-app.use(cors());
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked origin: ${origin}`));
+    }
+  })
+);
 app.use(express.json({ limit: "5mb" }));
 
 function getBoxSize(type) {
@@ -1280,7 +1303,18 @@ app.use((error, _req, res, _next) => {
   if (error instanceof multer.MulterError) {
     res.status(400).json({
       success: false,
-      error: error.code === "LIMIT_FILE_SIZE" ? "图片文件过大，请上传 8MB 以内的图片。" : "图片上传失败，请重试。"
+      error:
+        error.code === "LIMIT_FILE_SIZE"
+          ? `图片文件过大，请上传 ${uploadMaxFileSizeMb}MB 以内的图片。`
+          : "图片上传失败，请重试。"
+    });
+    return;
+  }
+
+  if (/CORS blocked origin/i.test(error.message || "")) {
+    res.status(403).json({
+      success: false,
+      error: "当前来源未被服务端 CORS 允许，请检查 CLIENT_ORIGIN 配置。"
     });
     return;
   }
@@ -1291,15 +1325,19 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-// app.listen(PORT, () => {
-//   console.log(`Embodied AI mock API is running on http://localhost:${PORT}`);
-// });
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`Embodied AI mock API is running on http://localhost:${PORT}`);
-// });
+const distPath = path.resolve(__dirname, "../dist");
+if (NODE_ENV === "production" && fsSync.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+}
 
 const server = app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Embodied AI mock API is running on http://localhost:${PORT}`);
+  console.log(`Embodied AI API is running on 0.0.0.0:${PORT}`);
+  console.log("NODE_ENV:", NODE_ENV);
+  console.log("UPLOAD_MAX_FILE_SIZE_MB:", uploadMaxFileSizeMb);
+  console.log("CLIENT_ORIGIN:", allowedOrigins.join(", ") || "(none)");
 });
 
 server.on("close", () => {
