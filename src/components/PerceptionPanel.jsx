@@ -104,6 +104,14 @@ export default function PerceptionPanel({ objects, summary, sceneDescription, im
                 </span>
                 <span className="truncate text-slate-500">{object.description}</span>
               </div>
+              <div className="mt-2 flex flex-wrap gap-1 text-[11px]">
+                {(object.affordance || []).map((item) => (
+                  <span key={item} className="rounded-full bg-white px-2 py-0.5 text-slate-600">
+                    {item}
+                  </span>
+                ))}
+              </div>
+              {object.risk ? <p className="mt-2 text-xs text-amber-700">风险：{object.risk}</p> : null}
             </div>
           ))
         )}

@@ -1,6 +1,25 @@
 import { TerminalSquare } from "lucide-react";
+import { useEffect, useRef } from "react";
+
+const typeClassMap = {
+  感知: "text-cyan-300",
+  空间映射: "text-teal-300",
+  规划: "text-amber-300",
+  执行: "text-emerald-300",
+  反馈: "text-violet-300",
+  状态: "text-slate-300",
+  验证: "text-sky-300",
+  完成: "text-green-300",
+  错误: "text-red-300"
+};
 
 export default function LogPanel({ logs, result }) {
+  const logEndRef = useRef(null);
+
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ block: "end" });
+  }, [logs]);
+
   return (
     <section className="rounded-lg border border-line bg-white p-4 shadow-soft">
       <div className="mb-3 flex items-center justify-between">
@@ -21,12 +40,18 @@ export default function LogPanel({ logs, result }) {
         {logs.length === 0 ? (
           <p className="text-slate-400">等待执行日志...</p>
         ) : (
-          logs.map((log, index) => (
-            <p key={`${log}-${index}`} className="mb-1">
-              <span className="text-teal-300">[{String(index + 1).padStart(2, "0")}]</span> {log}
-            </p>
-          ))
+          logs.map((log, index) => {
+            const item = typeof log === "string" ? { type: "执行", message: log, time: "--:--:--" } : log;
+            return (
+              <p key={`${item.time}-${item.message}-${index}`} className="mb-1 leading-relaxed">
+                <span className="text-slate-400">{item.time}</span>{" "}
+                <span className={typeClassMap[item.type] || "text-teal-300"}>[{item.type}]</span>{" "}
+                {item.message}
+              </p>
+            );
+          })
         )}
+        <div ref={logEndRef} />
       </div>
     </section>
   );

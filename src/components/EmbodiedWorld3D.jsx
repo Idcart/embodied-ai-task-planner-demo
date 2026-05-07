@@ -59,6 +59,46 @@ function getStepWorldPosition(step) {
   return { x: world.x, y: 0.38, z: world.z };
 }
 
+function PathLine({ path }) {
+  const geometry = useMemo(() => {
+    const points = path.map((point) => {
+        const world = getRobotWorldPosition(point);
+        return new THREE.Vector3(world.x, 0.26, world.z);
+      });
+    return new THREE.BufferGeometry().setFromPoints(points);
+  }, [path]);
+
+  if (path.length < 2) return null;
+
+  return (
+    <line>
+      <primitive object={geometry} attach="geometry" />
+      <lineBasicMaterial attach="material" color="#f59e0b" linewidth={3} transparent opacity={0.9} />
+    </line>
+  );
+}
+
+function TargetArea({ position, label }) {
+  if (!position) return null;
+  const world = scenePointToWorld(position);
+
+  return (
+    <group position={[world.x, 0.18, world.z]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.9, 48]} />
+        <meshBasicMaterial color="#2dd4bf" transparent opacity={0.24} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.9, 1.05, 64]} />
+        <meshBasicMaterial color="#2dd4bf" transparent opacity={0.95} side={THREE.DoubleSide} />
+      </mesh>
+      <Html center position={[0, 0.34, 0]} distanceFactor={7}>
+        <span className="world-label zone-label">{label || "目标区域"}</span>
+      </Html>
+    </group>
+  );
+}
+
 function SmoothGroup({ target, children }) {
   const ref = useRef(null);
 
@@ -166,13 +206,14 @@ function Robot({ position }) {
   );
 }
 
-function TableScene({ objects, robot, activeObjectId, heldObjectId, movedObjects, plan, currentStep }) {
+function TableScene({ objects, robot, activeObjectId, heldObjectId, movedObjects, robotPath, targetAreaPosition, plan, currentStep }) {
   const robotWorld = useMemo(() => getRobotWorldPosition(robot), [robot]);
   const currentPlanStep = useMemo(
     () => plan.find((step) => step.step === currentStep) || null,
     [currentStep, plan]
   );
   const stepWorld = getStepWorldPosition(currentPlanStep);
+  const targetAreaLabel = currentPlanStep?.targetArea || plan.find((step) => step.targetArea)?.targetArea || "目标区域";
 
   return (
     <>
@@ -191,14 +232,9 @@ function TableScene({ objects, robot, activeObjectId, heldObjectId, movedObjects
           <planeGeometry args={[10, 10, 20, 20]} />
           <meshBasicMaterial color="#3dd6c6" wireframe transparent opacity={0.16} />
         </mesh>
-        <mesh position={[3.2, 0.145, -3.35]} rotation={[-Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[0.62, 0.74, 64]} />
-          <meshBasicMaterial color="#2dd4bf" transparent opacity={0.95} side={THREE.DoubleSide} />
-        </mesh>
-        <Html center position={[3.2, 0.25, -3.35]} distanceFactor={7}>
-          <span className="world-label zone-label">桌子右上角</span>
-        </Html>
       </group>
+
+      <TargetArea position={targetAreaPosition} label={targetAreaLabel} />
 
       {objects.map((object) => (
         <ObjectMesh
@@ -224,6 +260,7 @@ function TableScene({ objects, robot, activeObjectId, heldObjectId, movedObjects
       ) : null}
 
       <Robot position={robotWorld} />
+      <PathLine path={robotPath || []} />
       <ContactShadows opacity={0.42} blur={2.6} position={[0, 0.14, 0]} scale={10} />
     </>
   );
@@ -235,6 +272,8 @@ export default function EmbodiedWorld3D({
   activeObjectId,
   heldObjectId,
   movedObjects,
+  robotPath,
+  targetAreaPosition,
   plan,
   currentStep
 }) {
@@ -252,7 +291,7 @@ export default function EmbodiedWorld3D({
         </span>
       </div>
 
-      <div className="relative h-[540px] overflow-hidden rounded-lg border border-cyan-200/15 bg-[#07111f]">
+      <div className="relative h-[680px] overflow-hidden rounded-lg border border-cyan-200/15 bg-[#07111f]">
         <Canvas shadows camera={{ position: [5.8, 6, 7.2], fov: 45 }}>
           <Suspense fallback={null}>
             <TableScene
@@ -261,6 +300,8 @@ export default function EmbodiedWorld3D({
               activeObjectId={activeObjectId}
               heldObjectId={heldObjectId}
               movedObjects={movedObjects}
+              robotPath={robotPath}
+              targetAreaPosition={targetAreaPosition}
               plan={plan}
               currentStep={currentStep}
             />

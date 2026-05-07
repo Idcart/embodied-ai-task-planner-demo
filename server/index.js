@@ -181,11 +181,46 @@ function normalizeType(type = "object") {
     .replace(/^_|_$/g, "") || "object";
 }
 
+function getAffordance(type = "object", operable = true) {
+  const normalized = normalizeType(type);
+  if (!operable) return ["observable"];
+  if (["cup", "book", "phone", "apple", "bottle", "box", "paper", "trash", "pen"].includes(normalized)) {
+    return ["pickable", "movable", "placeable"];
+  }
+  if (["basket", "container"].includes(normalized)) return ["placeable", "container"];
+  return ["movable"];
+}
+
+function getObjectRisk(type = "object", object = {}) {
+  if (object.risk) return object.risk;
+  const normalized = normalizeType(type);
+  if (normalized === "cup" || normalized === "bottle") return "可能倾倒或含液体，抓取前需要保持低速。";
+  if (normalized === "phone") return "表面易滑且可能易碎，建议轻抓轻放。";
+  if (normalized === "apple") return "球形物体易滚动，放置后需要验证稳定性。";
+  if (normalized === "basket") return "可作为目标容器，不建议作为被抓取目标。";
+  if (object.operable === false) return "模型判断该物体不适合被移动。";
+  return "低风险，仍需避开周围障碍物。";
+}
+
+function enrichObjectCapability(object) {
+  const type = normalizeType(object.type);
+  const operable = object.operable ?? !["table", "desk", "surface", "floor", "wall", "basket"].includes(type);
+  return {
+    ...object,
+    type,
+    icon: object.icon || type,
+    operable,
+    affordance: Array.isArray(object.affordance) && object.affordance.length ? object.affordance : getAffordance(type, operable),
+    risk: getObjectRisk(type, { ...object, operable }),
+    description: object.description || `${object.name || "物体"}位于${object.position?.region || "桌面区域"}，可用于任务规划。`
+  };
+}
+
 function normalizeVisionObject(object, index) {
   const xPercent = Math.round(Math.max(0, Math.min(100, Number(object?.position?.xPercent ?? 50))));
   const yPercent = Math.round(Math.max(0, Math.min(100, Number(object?.position?.yPercent ?? 50))));
   const type = normalizeType(object?.type);
-  const normalized = {
+  const normalized = enrichObjectCapability({
     id: object?.id || `object_${index + 1}`,
     name: object?.name || `物体${index + 1}`,
     type,
@@ -197,10 +232,12 @@ function normalizeVisionObject(object, index) {
       yPercent
     },
     confidence: Math.max(0, Math.min(1, Number(object?.confidence ?? 0.75))),
-    operable: Boolean(object?.operable),
+    operable: object?.operable ?? true,
     description: object?.description || "视觉模型识别到的物体",
+    affordance: object?.affordance,
+    risk: object?.risk,
     status: "detected"
-  };
+  });
 
   return addConsistentBbox(normalized);
 }
@@ -376,6 +413,8 @@ async function analyzeImageWithVisionModel(file) {
       },
       "confidence": 0.0,
       "operable": true,
+      "affordance": ["pickable", "movable", "placeable"],
+      "risk": "风险提示",
       "description": "中文简短描述"
     }
   ]
@@ -389,8 +428,10 @@ async function analyzeImageWithVisionModel(file) {
 5. xPercent、yPercent 是物体中心点在图片中的大致百分比坐标，范围 0 到 100。
 6. confidence 范围 0 到 1。
 7. operable 表示是否适合被机器人移动或操作。
-8. 最多返回 8 个主要物体，优先选择最清晰、最适合机器人操作或定位的物品，忽略背景墙面、桌面本身这类不可操作大背景。
-9. 图片内容很多时，不要穷举全部细节，只输出对任务规划最有用的主要物体。
+8. affordance 是可执行动作数组，可用 pickable、movable、placeable、container、observable。
+9. risk 是该物体在抓取、移动或放置时的中文风险提示。
+10. 最多返回 8 个主要物体，优先选择最清晰、最适合机器人操作或定位的物品，忽略背景墙面、桌面本身这类不可操作大背景。
+11. 图片内容很多时，不要穷举全部细节，只输出对任务规划最有用的主要物体。
 `;
 
   const modelText =
@@ -481,7 +522,7 @@ const sceneObjects = [
     confidence: 0.86,
     status: "detected"
   }
-].map(addConsistentBbox);
+].map((object) => addConsistentBbox(enrichObjectCapability(object)));
 
 const taskPresets = [
   {
@@ -644,15 +685,27 @@ function buildUnderstanding(task, intent, objects, targetObject = null) {
       "场景感知结果已生成",
       `目标对象${targetObject ? "已定位" : "需要重新感知确认"}`,
       targetObject?.operable === false && needsDestination ? "目标对象不适合移动或抓取" : "目标操作性已评估",
+      targetObject?.affordance?.length ? `可执行能力：${targetObject.affordance.join("、")}` : "可执行能力待确认",
       needsDestination ? `目标位置${hasDestination ? "已解析" : "需要用户补充"}` : "该任务不需要移动目标位置"
     ],
     risks: [
       ...(!targetObject && intent.actionType !== "clean" ? ["未找到目标物体，无法直接执行抓取或移动"] : []),
       ...(targetObject?.operable === false && needsDestination ? [`${targetObject.name}不适合被机器人移动或抓取，建议改为观察/定位任务`] : []),
+      ...(targetObject?.risk ? [`${targetObject.name}风险：${targetObject.risk}`] : []),
       ...(needsDestination && !hasDestination ? ["目标位置不明确，可能导致放置失败"] : []),
       ...(lowConfidenceObjects.length ? [`${lowConfidenceObjects.map((item) => item.name).join("、")}置信度偏低，建议执行前复核`] : []),
       "当前 Demo 未接真实机械臂碰撞检测，避障为规则模拟"
     ]
+  };
+}
+
+function makeStep(action, target, description, extra = {}) {
+  return {
+    action,
+    target,
+    description,
+    status: "waiting",
+    ...extra
   };
 }
 
@@ -668,7 +721,7 @@ function makeFailure(reason, suggestion, intent, understanding) {
     plan: [
       {
         step: 1,
-        action: "observe",
+        action: "observe_scene",
         target: "场景",
         description: "重新观察场景并确认任务条件",
         status: "waiting"
@@ -685,6 +738,24 @@ function makeFailure(reason, suggestion, intent, understanding) {
 }
 
 function buildPlan(task, objects) {
+  if (!String(task || "").trim()) {
+    const intent = {
+      targetType: "unknown",
+      targetName: "未指定",
+      actionType: "unknown",
+      destination: "未指定",
+      destinationPosition: null
+    };
+    const understanding = buildUnderstanding("", intent, objects, null);
+    return makeFailure("用户任务为空", "请输入明确任务，例如“把杯子移动到桌子右上角”。", intent, understanding);
+  }
+
+  if (!objects.length) {
+    const intent = inferTask(task);
+    const understanding = buildUnderstanding(task, intent, objects, null);
+    return makeFailure("未识别到物体", "请先上传图片并完成场景识别，或使用内置场景重新感知。", intent, understanding);
+  }
+
   const intent = inferTaskWithObjects(task, objects);
   const targetObject = findObject(objects, intent.targetType, intent.targetName);
   const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType, intent.destination) : null;
@@ -705,7 +776,16 @@ function buildPlan(task, objects) {
   if (targetObject?.operable === false && ["move", "put_in"].includes(intent.actionType)) {
     return makeFailure(
       "目标物体不适合操作",
-      `${targetObject.name}被识别为不适合移动或抓取。建议改成“找到${targetObject.name}”或“观察${targetObject.name}”。`,
+      `${targetObject.name}被识别为不适合移动或抓取。风险：${targetObject.risk || "不建议操作"}。建议改成“找到${targetObject.name}”或“观察${targetObject.name}”。`,
+      intent,
+      understanding
+    );
+  }
+
+  if (["move", "put_in"].includes(intent.actionType) && !targetObject?.affordance?.includes("movable")) {
+    return makeFailure(
+      "目标物体缺少可移动能力",
+      `${targetObject?.name || intent.targetName}未包含 movable 能力，风险：${targetObject?.risk || "能力不足"}。`,
       intent,
       understanding
     );
@@ -721,38 +801,27 @@ function buildPlan(task, objects) {
   }
 
   if (intent.actionType === "find") {
+    const plan = [
+      makeStep("observe_scene", "桌面", "扫描桌面区域并定位候选物体"),
+      makeStep("locate_target", intent.targetName, `定位${intent.targetName}并复核图像坐标`, {
+        objectId: targetObject?.id,
+        position: targetObject ? getObjectPoint(targetObject) : null
+      }),
+      makeStep("verify_result", intent.targetName, `报告${intent.targetName}的位置`, {
+        objectId: targetObject?.id,
+        position: targetObject ? getObjectPoint(targetObject) : null
+      }),
+      makeStep("done", intent.targetName, "完成定位任务", {
+        objectId: targetObject?.id
+      })
+    ].map((step, index) => ({ step: index + 1, ...step }));
+
     return {
       intent,
       understanding,
       executable: true,
       failure: null,
-      plan: [
-        {
-          step: 1,
-          action: "observe",
-          target: "桌面",
-          description: "扫描桌面区域并定位候选物体",
-          status: "waiting"
-        },
-        {
-          step: 2,
-          action: "move_to",
-          target: intent.targetName,
-          objectId: targetObject?.id,
-          position: targetObject ? getObjectPoint(targetObject) : null,
-          description: `移动到${intent.targetName}附近并复核位置`,
-          status: "waiting"
-        },
-        {
-          step: 3,
-          action: "done",
-          target: intent.targetName,
-          objectId: targetObject?.id,
-          position: targetObject ? getObjectPoint(targetObject) : null,
-          description: `报告${intent.targetName}的位置并完成任务`,
-          status: "waiting"
-        }
-      ]
+      plan
     };
   }
 
@@ -765,13 +834,23 @@ function buildPlan(task, objects) {
     const steps = [
       {
         step: 1,
-        action: "observe",
+        action: "observe_scene",
         target: "桌面",
         description: "识别桌面上的可清理杂物",
         status: "waiting"
       },
       {
         step: 2,
+        action: "check_target_area",
+        target: intent.destination,
+        position: intent.destinationPosition,
+        targetPosition: intent.destinationPosition,
+        targetArea: intent.destination,
+        description: `检查${intent.destination}是否可用于放置杂物`,
+        status: "waiting"
+      },
+      {
+        step: 3,
         action: "avoid",
         target: "易碰撞区域",
         position: { x: 285, y: 205 },
@@ -786,7 +865,23 @@ function buildPlan(task, objects) {
 
     trashObjects.forEach((object) => {
       addStep({
-          action: "move_to",
+          action: "locate_target",
+          target: object.name,
+          objectId: object.id,
+          position: getObjectPoint(object),
+          description: `定位${object.name}并确认可清理`,
+          status: "waiting"
+        });
+      addStep({
+          action: "check_operability",
+          target: object.name,
+          objectId: object.id,
+          position: getObjectPoint(object),
+          description: `检查${object.name}能力：${object.affordance?.join("、") || "未知"}`,
+          status: "waiting"
+        });
+      addStep({
+          action: "move_to_object",
           target: object.name,
           objectId: object.id,
           position: getObjectPoint(object),
@@ -794,7 +889,7 @@ function buildPlan(task, objects) {
           status: "waiting"
         });
       addStep({
-          action: "pick",
+          action: "pick_object",
           target: object.name,
           objectId: object.id,
           position: getObjectPoint(object),
@@ -802,10 +897,22 @@ function buildPlan(task, objects) {
           status: "waiting"
         });
       addStep({
-          action: "place",
+          action: "move_to_target",
           target: intent.destination,
           objectId: object.id,
           position: intent.destinationPosition,
+          targetPosition: intent.destinationPosition,
+          targetArea: intent.destination,
+          description: `携带${object.name}移动到${intent.destination}`,
+          status: "waiting"
+        });
+      addStep({
+          action: "place_object",
+          target: intent.destination,
+          objectId: object.id,
+          position: intent.destinationPosition,
+          targetPosition: intent.destinationPosition,
+          targetArea: intent.destination,
           description: `将${object.name}放到${intent.destination}`,
           status: "waiting"
         });
@@ -813,73 +920,76 @@ function buildPlan(task, objects) {
 
     steps.push({
       step: steps.length + 1,
-      action: "done",
+      action: "verify_result",
       target: "任务完成",
       description: "确认桌面杂物已清理完成",
+      status: "waiting"
+    });
+    steps.push({
+      step: steps.length + 1,
+      action: "done",
+      target: "任务完成",
+      description: "完成清理任务并反馈结果",
       status: "waiting"
     });
 
     return { intent, understanding, executable: true, failure: null, plan: steps };
   }
 
+  const plan = [
+    makeStep("observe_scene", "桌面", "读取感知结果并构建桌面语义场景"),
+    makeStep("locate_target", intent.targetName, `定位目标物体：${intent.targetName}`, {
+      objectId: targetObject?.id,
+      position: targetObject ? getObjectPoint(targetObject) : null
+    }),
+    makeStep("check_operability", intent.targetName, `检查${intent.targetName}是否可操作：${targetObject?.operable ? "可操作" : "不建议操作"}`, {
+      objectId: targetObject?.id,
+      position: targetObject ? getObjectPoint(targetObject) : null,
+      risk: targetObject?.risk,
+      affordance: targetObject?.affordance
+    }),
+    makeStep("check_target_area", intent.destination, `检查目标区域：${intent.destination}`, {
+      position: destinationPosition,
+      targetPosition: destinationPosition,
+      targetArea: intent.destination
+    }),
+    makeStep("move_to_object", intent.targetName, `移动机器人到${intent.targetName}附近`, {
+      objectId: targetObject?.id,
+      position: targetObject ? getObjectPoint(targetObject) : null
+    }),
+    makeStep("pick_object", intent.targetName, `抓取${intent.targetName}`, {
+      objectId: targetObject?.id,
+      position: targetObject ? getObjectPoint(targetObject) : null
+    }),
+    makeStep("move_to_target", intent.destination, `携带${intent.targetName}移动到${intent.destination}`, {
+      objectId: targetObject?.id,
+      position: destinationPosition,
+      targetPosition: destinationPosition,
+      targetArea: intent.destination
+    }),
+    makeStep("place_object", intent.destination, `将${intent.targetName}放到${intent.destination}`, {
+      objectId: targetObject?.id,
+      position: destinationPosition,
+      targetPosition: destinationPosition,
+      targetArea: intent.destination
+    }),
+    makeStep("verify_result", "任务结果", "验证目标物体是否已到达目标区域", {
+      objectId: targetObject?.id,
+      position: destinationPosition,
+      targetPosition: destinationPosition,
+      targetArea: intent.destination
+    }),
+    makeStep("done", "任务完成", "确认目标状态并结束执行", {
+      objectId: targetObject?.id
+    })
+  ].map((step, index) => ({ step: index + 1, ...step }));
+
   return {
     intent,
     understanding,
     executable: true,
     failure: null,
-    plan: [
-      {
-        step: 1,
-        action: "observe",
-        target: intent.targetName,
-        objectId: targetObject?.id,
-        position: targetObject ? getObjectPoint(targetObject) : null,
-        description: `识别桌面上的${intent.targetName}`,
-        status: "waiting"
-      },
-      {
-        step: 2,
-        action: "avoid",
-        target: "障碍物",
-        position: { x: 260, y: 185 },
-        description: "检查移动路径并避开桌面障碍物",
-        status: "waiting"
-      },
-      {
-        step: 3,
-        action: "move_to",
-        target: intent.targetName,
-        objectId: targetObject?.id,
-        position: targetObject ? getObjectPoint(targetObject) : null,
-        description: `移动机器人到${intent.targetName}附近`,
-        status: "waiting"
-      },
-      {
-        step: 4,
-        action: "pick",
-        target: intent.targetName,
-        objectId: targetObject?.id,
-        position: targetObject ? getObjectPoint(targetObject) : null,
-        description: `抓取${intent.targetName}`,
-        status: "waiting"
-      },
-      {
-        step: 5,
-        action: "place",
-        target: intent.destination,
-        objectId: targetObject?.id,
-        position: destinationPosition,
-        description: `将${intent.targetName}放到${intent.destination}`,
-        status: "waiting"
-      },
-      {
-        step: 6,
-        action: "done",
-        target: "任务完成",
-        description: "确认目标状态并结束执行",
-        status: "waiting"
-      }
-    ]
+    plan
   };
 }
 
@@ -960,6 +1070,107 @@ app.post("/api/perception", upload.single("image"), async (req, res) => {
   }
 });
 
+function getActiveVisionClient() {
+  return aiProvider === "zhipu" ? zhipuClient : aiProvider === "mimo" ? mimoClient : openaiClient;
+}
+
+function normalizeCameraObject(object, index) {
+  const normalizedType = normalizeType(object.type);
+  return addConsistentBbox(
+    enrichObjectCapability({
+      ...object,
+      id: `camera_${normalizedType}_${index + 1}`,
+      type: normalizedType,
+      source: "camera"
+    })
+  );
+}
+
+app.post("/api/perception/live-frame", upload.single("image"), async (req, res) => {
+  const startedAt = Date.now();
+
+  try {
+    if (!req.file) {
+      res.status(400).json({
+        success: false,
+        message: "实时摄像头画面识别失败",
+        error: "缺少 image 文件"
+      });
+      return;
+    }
+
+    const extension = getUploadExtension(req.file);
+    const looksLikeImage = req.file.mimetype.startsWith("image/") || [".jpg", ".jpeg", ".png", ".webp"].includes(extension);
+    if (!looksLikeImage) {
+      res.status(400).json({
+        success: false,
+        message: "实时摄像头画面识别失败",
+        error: "请上传摄像头截取的图片帧。"
+      });
+      return;
+    }
+
+    const activeVisionClient = getActiveVisionClient();
+    if (!activeVisionClient) {
+      const objects = sceneObjects.map(normalizeCameraObject);
+      res.json({
+        success: true,
+        source: "camera",
+        mode: "mock",
+        timestamp: Date.now(),
+        processingTimeMs: Date.now() - startedAt,
+        sceneDescription: "当前未配置真实视觉模型，返回摄像头实时感知 mock 桌面结果。",
+        objects,
+        annotations: objects.map((object) => ({
+          id: object.id,
+          label: object.name,
+          bbox: object.bbox,
+          confidence: object.confidence
+        })),
+        summary: `摄像头 mock 识别到 ${objects.length} 个物体`
+      });
+      return;
+    }
+
+    const result = await analyzeImageWithVisionModel(req.file);
+    const objects = result.objects.map(normalizeCameraObject);
+
+    res.json({
+      success: true,
+      source: "camera",
+      mode: "vision_model",
+      model: visionModel,
+      timestamp: Date.now(),
+      processingTimeMs: Date.now() - startedAt,
+      sceneDescription: result.sceneDescription,
+      objects,
+      annotations: objects.map((object) => ({
+        id: object.id,
+        label: object.name,
+        bbox: object.bbox,
+        confidence: object.confidence
+      })),
+      summary: `摄像头实时识别到 ${objects.length} 个物体`
+    });
+  } catch (error) {
+    console.error("Live frame perception error:", {
+      name: error.name,
+      status: error.status,
+      code: error.code,
+      message: error.message
+    });
+
+    res.status(error.statusCode || 500).json({
+      success: false,
+      message: "实时摄像头画面识别失败",
+      error: error.message || "具体错误未知",
+      source: "camera",
+      timestamp: Date.now(),
+      processingTimeMs: Date.now() - startedAt
+    });
+  }
+});
+
 app.post("/api/plan", (req, res) => {
   const { task, objects = sceneObjects } = req.body || {};
   const result = buildPlan(task, objects);
@@ -977,6 +1188,20 @@ app.post("/api/plan", (req, res) => {
 
 app.post("/api/execute", (req, res) => {
   const { task, plan = [], executable = true, failure = null } = req.body || {};
+  if (!Array.isArray(plan) || plan.length === 0) {
+    res.status(422).json({
+      task,
+      success: false,
+      result: "执行模拟失败：没有可执行动作步骤",
+      failure: {
+        reason: "执行计划为空",
+        suggestion: "请先生成动作规划，再开始执行。"
+      },
+      logs: ["执行计划为空，无法模拟机器人动作。"]
+    });
+    return;
+  }
+
   if (!executable) {
     res.status(422).json({
       task,
@@ -1000,6 +1225,54 @@ app.post("/api/execute", (req, res) => {
     executedSteps,
     result: `机器人已完成${task || "当前任务"}`,
     logs: executedSteps.map((step) => `Step ${step.step}: ${step.description} - 已完成`)
+  });
+});
+
+const hardwareStatus = {
+  connected: false,
+  deviceType: null,
+  message: "当前未连接实体设备"
+};
+
+app.get("/api/hardware/status", (_req, res) => {
+  res.json(hardwareStatus);
+});
+
+app.post("/api/hardware/execute-step", (req, res) => {
+  const { command } = req.body || {};
+
+  if (!hardwareStatus.connected) {
+    res.status(409).json({
+      success: false,
+      ...hardwareStatus,
+      error: "当前未连接实体设备，已阻止真实执行。"
+    });
+    return;
+  }
+
+  res.json({
+    success: true,
+    command,
+    result: "硬件单步指令已提交"
+  });
+});
+
+app.post("/api/hardware/execute-plan", (req, res) => {
+  const { commands = [] } = req.body || {};
+
+  if (!hardwareStatus.connected) {
+    res.status(409).json({
+      success: false,
+      ...hardwareStatus,
+      error: "当前未连接实体设备，已阻止真实执行。"
+    });
+    return;
+  }
+
+  res.json({
+    success: true,
+    commandCount: commands.length,
+    result: "硬件执行计划已提交"
   });
 });
 

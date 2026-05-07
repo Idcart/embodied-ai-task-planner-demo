@@ -1,3 +1,4 @@
+import { CheckCircle2, CircleDot } from "lucide-react";
 import { flowStages } from "../lib/constants";
 
 export default function FlowDiagram({ activeStage }) {
@@ -12,7 +13,7 @@ export default function FlowDiagram({ activeStage }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-7">
         {flowStages.map((stage, index) => {
           const isActive = stage.id === activeStage;
           const isDone = activeIndex > index;
@@ -20,7 +21,7 @@ export default function FlowDiagram({ activeStage }) {
           return (
             <div key={stage.id} className="flex min-w-0 items-center gap-2">
               <div
-                className={`flex h-12 min-w-0 flex-1 items-center justify-center rounded-lg border px-2 text-sm font-semibold transition ${
+                className={`flex h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border px-2 text-sm font-semibold transition ${
                   isActive
                     ? "border-amber bg-amber-50 text-amber-700"
                     : isDone
@@ -28,9 +29,9 @@ export default function FlowDiagram({ activeStage }) {
                       : "border-slate-200 bg-panel text-slate-500"
                 }`}
               >
+                {isDone ? <CheckCircle2 size={16} aria-hidden="true" /> : <CircleDot size={15} aria-hidden="true" />}
                 {stage.label}
               </div>
-              {index < flowStages.length - 1 ? <span className="hidden text-slate-300 sm:block">→</span> : null}
             </div>
           );
         })}

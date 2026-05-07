@@ -14,7 +14,8 @@ export default function TaskPanel({
   setImageName,
   imagePreview,
   setImagePreview,
-  setImageFile
+  setImageFile,
+  onImageSelected
 }) {
   function handleImageChange(event) {
     const file = event.target.files?.[0];
@@ -22,11 +23,13 @@ export default function TaskPanel({
       setImageName("");
       setImagePreview("");
       setImageFile(null);
+      onImageSelected?.(null);
       return;
     }
 
     setImageName(file.name);
     setImageFile(file);
+    onImageSelected?.(file);
     const reader = new FileReader();
     reader.onload = () => {
       setImagePreview(typeof reader.result === "string" ? reader.result : "");
