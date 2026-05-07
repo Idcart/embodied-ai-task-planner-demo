@@ -396,7 +396,7 @@ sudo npm install -g pm2
 # 4. 克隆项目
 sudo mkdir -p /var/www
 cd /var/www
-sudo git clone <你的 GitHub 仓库地址> embodied-ai-demo
+sudo git clone https://github.com/Idcart/embodied-ai-task-planner-demo.git embodied-ai-demo
 sudo chown -R $USER:$USER /var/www/embodied-ai-demo
 cd /var/www/embodied-ai-demo
 
