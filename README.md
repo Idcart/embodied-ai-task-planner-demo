@@ -4,6 +4,10 @@
 
 当前版本支持图片/摄像头感知、3D 虚拟桌面空间、`worldState` 状态管理、机器人路径动画、执行适配层，以及未来接入实体设备的 mock 接口。
 
+## 实际效果图
+
+![具身智能 Demo 实际运行效果](docs/images/demo-screenshot.png)
+
 ## 技术栈
 
 - 前端：React + Vite + Tailwind CSS

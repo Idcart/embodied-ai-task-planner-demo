@@ -649,10 +649,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#e9eef5] text-ink">
       <Header statusSummary={statusSummary} activeStage={activeStage} />
-      <div className="mx-auto max-w-[1500px] px-5 pt-5">
+      <div className="mx-auto max-w-[1600px] px-5 pt-5">
         <ProcessStepper activeStage={activeStage} />
       </div>
-      <main className="mx-auto grid max-w-[1500px] grid-cols-1 gap-4 px-5 pb-5 pt-4 xl:grid-cols-[minmax(300px,24%)_minmax(0,1fr)]">
+      <main className="mx-auto grid max-w-[1600px] grid-cols-1 gap-4 px-5 pb-5 pt-4 xl:grid-cols-[minmax(280px,22%)_minmax(0,1fr)]">
         <ControlPanel
             task={task}
             setTask={setTask}
@@ -696,7 +696,7 @@ export default function App() {
               />
             </div>
           </div>
-          <div className="grid flex-1 grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1fr)_minmax(320px,36%)]">
+          <div className="grid flex-1 grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(280px,34%)]">
             <EmbodiedWorld3D
               objects={sceneObjects}
               robot={robot}
