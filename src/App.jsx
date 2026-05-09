@@ -407,7 +407,9 @@ export default function App() {
       addWorldStateLog("图片/内置感知已重建 worldState", nextWorldState);
     } catch (error) {
       setActiveStage("feedback");
-      addLog("错误", `模型识别失败：${error.message}`);
+      const message = error.message || "图片识别失败，请稍后重试。";
+      setResult(message);
+      addLog("错误", `图片识别失败：${message}`);
     } finally {
       setIsBusy(false);
     }
@@ -650,7 +652,7 @@ export default function App() {
       <div className="mx-auto max-w-[1500px] px-5 pt-5">
         <ProcessStepper activeStage={activeStage} />
       </div>
-      <main className="mx-auto grid max-w-[1500px] grid-cols-1 gap-4 px-5 py-5 xl:grid-cols-[minmax(320px,30%)_1fr]">
+      <main className="mx-auto grid max-w-[1500px] grid-cols-1 gap-4 px-5 pb-5 pt-4 xl:grid-cols-[minmax(300px,24%)_minmax(0,1fr)]">
         <ControlPanel
             task={task}
             setTask={setTask}
@@ -681,7 +683,7 @@ export default function App() {
             objects={sceneObjects}
         />
 
-        <div className="space-y-4">
+        <div className="flex h-full flex-col gap-4">
           <div className="flex items-center justify-between rounded-lg border border-line bg-white px-4 py-3 shadow-soft">
             <div>
               <p className="text-sm text-slate-500">当前闭环状态</p>
@@ -694,33 +696,33 @@ export default function App() {
               />
             </div>
           </div>
-          <EmbodiedWorld3D
-            objects={sceneObjects}
-            robot={robot}
-            activeObjectId={activeObjectId}
-            heldObjectId={heldObjectId}
-            movedObjects={movedObjects}
-            robotPath={robotPath}
-            targetAreaPosition={targetAreaPosition}
-            plan={plan}
-            currentStep={currentStep}
-          />
-        </div>
-
-        <div className="xl:col-span-2">
-          <BottomInspector
-            intent={intent}
-            understanding={understanding}
-            failure={failure}
-            plan={plan}
-            currentStep={currentStep}
-            objects={sceneObjects}
-            summary={perceptionSummary}
-            sceneDescription={sceneDescription}
-            imagePreview={imagePreview}
-            logs={logs}
-            result={result}
-          />
+          <div className="grid flex-1 grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1fr)_minmax(320px,36%)]">
+            <EmbodiedWorld3D
+              objects={sceneObjects}
+              robot={robot}
+              activeObjectId={activeObjectId}
+              heldObjectId={heldObjectId}
+              movedObjects={movedObjects}
+              robotPath={robotPath}
+              targetAreaPosition={targetAreaPosition}
+              plan={plan}
+              currentStep={currentStep}
+            />
+            <BottomInspector
+              intent={intent}
+              understanding={understanding}
+              failure={failure}
+              plan={plan}
+              currentStep={currentStep}
+              worldState={worldState}
+              objects={sceneObjects}
+              summary={perceptionSummary}
+              sceneDescription={sceneDescription}
+              imagePreview={imagePreview}
+              logs={logs}
+              result={result}
+            />
+          </div>
         </div>
       </main>
     </div>

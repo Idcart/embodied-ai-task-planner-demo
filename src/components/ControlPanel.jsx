@@ -3,7 +3,6 @@ import { taskExamples } from "../lib/constants";
 import CameraPerceptionPanel from "./CameraPerceptionPanel";
 import CoordinateCalibrationPreview from "./CoordinateCalibrationPreview";
 import DemoGuidePanel from "./DemoGuidePanel";
-import WorldStatePanel from "./WorldStatePanel";
 
 const executionModes = [
   { id: "simulation", label: "3D 仿真执行", description: "播放虚拟机器人动画" },
@@ -103,15 +102,23 @@ export default function ControlPanel({
           {objectCount ? "重新识别场景" : "识别场景"}
         </button>
 
-        <CameraPerceptionPanel
-          onLog={onLog}
-          onPerceptionResult={onCameraResult}
-          onUnlockScene={onUnlockScene}
-          sceneLock={sceneLock}
-          isFrozen={isFrozen}
-          canUpdateWorld={canUpdateWorld}
-          worldSource={worldSource}
-        />
+        <details className="group rounded-lg border border-line bg-slate-50">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-3 text-sm font-semibold text-ink">
+            <span>摄像头感知测试</span>
+            <span className="text-xs text-slate-500 transition group-open:rotate-180">⌄</span>
+          </summary>
+          <div className="border-t border-line p-3">
+            <CameraPerceptionPanel
+              onLog={onLog}
+              onPerceptionResult={onCameraResult}
+              onUnlockScene={onUnlockScene}
+              sceneLock={sceneLock}
+              isFrozen={isFrozen}
+              canUpdateWorld={canUpdateWorld}
+              worldSource={worldSource}
+            />
+          </div>
+        </details>
 
         <textarea
           className="min-h-28 w-full resize-none rounded-lg border border-line bg-slate-50 px-3 py-3 text-sm text-ink outline-none transition focus:border-signal focus:bg-white focus:ring-2 focus:ring-signal/20"
@@ -120,40 +127,40 @@ export default function ControlPanel({
           placeholder="例如：把杯子移动到桌子右上角"
         />
 
-        <div className="grid grid-cols-1 gap-2">
+        <select
+          className="w-full rounded-lg border border-line bg-panel px-3 py-2 text-sm text-slate-700 outline-none transition focus:border-signal focus:bg-white focus:ring-2 focus:ring-signal/20"
+          defaultValue=""
+          onChange={(event) => {
+            if (event.target.value) setTask(event.target.value);
+          }}
+        >
+          <option value="">选择推荐任务指令</option>
           {taskExamples.map((example) => (
-            <button
-              key={example}
-              className="rounded-lg border border-line bg-panel px-3 py-2 text-left text-sm text-slate-700 transition hover:border-signal hover:bg-teal-50"
-              onClick={() => setTask(example)}
-            >
+            <option key={example} value={example}>
               {example}
-            </button>
+            </option>
           ))}
-        </div>
+        </select>
 
         <div className="space-y-2 rounded-lg border border-line bg-slate-50 p-3">
           <div className="flex items-center gap-2 text-sm font-semibold text-ink">
             <Cpu size={17} aria-hidden="true" />
             执行模式
           </div>
-          <div className="grid gap-2">
+          <select
+            className="w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none transition focus:border-signal focus:ring-2 focus:ring-signal/20"
+            value={executionMode}
+            onChange={(event) => setExecutionMode(event.target.value)}
+          >
             {executionModes.map((mode) => (
-              <button
-                key={mode.id}
-                type="button"
-                className={`rounded-lg border px-3 py-2 text-left transition ${
-                  executionMode === mode.id
-                    ? "border-signal bg-teal-50 text-ink shadow-sm"
-                    : "border-line bg-white text-slate-600 hover:border-signal"
-                }`}
-                onClick={() => setExecutionMode(mode.id)}
-              >
-                <span className="block text-sm font-semibold">{mode.label}</span>
-                <span className="mt-1 block text-xs text-slate-500">{mode.description}</span>
-              </button>
+              <option key={mode.id} value={mode.id}>
+                {mode.label}
+              </option>
             ))}
-          </div>
+          </select>
+          <p className="text-xs text-slate-500">
+            {executionModes.find((mode) => mode.id === executionMode)?.description}
+          </p>
           <CoordinateCalibrationPreview objects={objects} />
         </div>
 
@@ -168,8 +175,6 @@ export default function ControlPanel({
           </button>
         </div>
       </section>
-
-      <WorldStatePanel worldState={worldState} objectCount={objectCount} />
     </aside>
   );
 }

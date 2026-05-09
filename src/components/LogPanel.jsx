@@ -14,10 +14,12 @@ const typeClassMap = {
 };
 
 export default function LogPanel({ logs, result }) {
-  const logEndRef = useRef(null);
+  const logContainerRef = useRef(null);
 
   useEffect(() => {
-    logEndRef.current?.scrollIntoView({ block: "end" });
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
   }, [logs]);
 
   return (
@@ -36,7 +38,7 @@ export default function LogPanel({ logs, result }) {
         </div>
       ) : null}
 
-      <div className="h-48 overflow-y-auto rounded-lg bg-ink p-3 font-mono text-xs text-slate-100">
+      <div ref={logContainerRef} className="h-48 overflow-y-auto rounded-lg bg-ink p-3 font-mono text-xs text-slate-100">
         {logs.length === 0 ? (
           <p className="text-slate-400">等待执行日志...</p>
         ) : (
@@ -51,7 +53,6 @@ export default function LogPanel({ logs, result }) {
             );
           })
         )}
-        <div ref={logEndRef} />
       </div>
     </section>
   );

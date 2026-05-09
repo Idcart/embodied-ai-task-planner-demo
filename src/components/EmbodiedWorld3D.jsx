@@ -280,7 +280,7 @@ export default function EmbodiedWorld3D({
   const currentPlanStep = plan.find((step) => step.step === currentStep);
 
   return (
-    <section className="rounded-lg border border-slate-800/20 bg-[#0b1220] p-4 shadow-soft">
+    <section className="flex flex-1 flex-col rounded-lg border border-slate-800/20 bg-[#0b1220] p-4 shadow-soft">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-white">3D 虚拟空间</h2>
@@ -291,7 +291,7 @@ export default function EmbodiedWorld3D({
         </span>
       </div>
 
-      <div className="relative h-[680px] overflow-hidden rounded-lg border border-cyan-200/15 bg-[#07111f]">
+      <div className="relative h-[clamp(420px,58vh,560px)] overflow-hidden rounded-lg border border-cyan-200/15 bg-[#07111f]">
         <Canvas shadows camera={{ position: [5.8, 6, 7.2], fov: 45 }}>
           <Suspense fallback={null}>
             <TableScene

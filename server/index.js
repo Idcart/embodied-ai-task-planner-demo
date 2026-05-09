@@ -34,6 +34,7 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173,http
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
+const privateNetworkOriginPattern = /^https?:\/\/(localhost|127\.0\.0\.1|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})(:\d+)?$/;
 const SCENE_CANVAS = { width: 600, height: 400 };
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -43,7 +44,7 @@ const configuredAiProvider =
   process.env.AI_PROVIDER ||
   (process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY
     ? "zhipu"
-    : process.env.XIAOMI_API_KEY || process.env.XIAOMI_MIMO_API_KEY || process.env.MIMO_API_KEY
+    : process.env.XIAOMI_API_KEY || process.env.XIAOMI_MIMO_API_KEY || process.env.XIAOMI_MIMO_TOKEN || process.env.MIMO_API_KEY || process.env.MIMO_TOKEN
       ? "mimo"
       : "openai");
 const aiProvider = configuredAiProvider === "xiaomi" ? "mimo" : configuredAiProvider;
@@ -52,7 +53,12 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 const zhipuApiKey = process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY;
 const zhipuBaseURL =
   process.env.ZHIPUAI_BASE_URL || process.env.ZHIPU_BASE_URL || "https://open.bigmodel.cn/api/paas/v4";
-const mimoApiKey = process.env.XIAOMI_API_KEY || process.env.XIAOMI_MIMO_API_KEY || process.env.MIMO_API_KEY;
+const mimoApiKey =
+  process.env.XIAOMI_API_KEY ||
+  process.env.XIAOMI_MIMO_API_KEY ||
+  process.env.XIAOMI_MIMO_TOKEN ||
+  process.env.MIMO_API_KEY ||
+  process.env.MIMO_TOKEN;
 const mimoBaseURL =
   process.env.XIAOMI_MIMO_BASE_URL || process.env.MIMO_BASE_URL || process.env.XIAOMI_BASE_URL || "https://api.xiaomimimo.com/v1";
 const openaiBaseURL = process.env.OPENAI_BASE_URL;
@@ -110,6 +116,11 @@ app.use(
       }
 
       if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      if (NODE_ENV !== "production" && privateNetworkOriginPattern.test(origin)) {
         callback(null, true);
         return;
       }
@@ -293,6 +304,12 @@ function isHeicLike(file) {
 }
 
 async function convertImageWithSips(inputBuffer, inputExtension = ".jpg") {
+  if (!fsSync.existsSync("/usr/bin/sips")) {
+    const error = new Error("当前运行环境缺少 sips 图片处理工具。");
+    error.code = "SIPS_MISSING";
+    throw error;
+  }
+
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "embodied-ai-"));
   const inputPath = path.join(tempDir, `input${inputExtension || ".jpg"}`);
   const outputPath = path.join(tempDir, `${randomUUID()}.jpg`);
@@ -337,7 +354,13 @@ async function normalizeUploadedImage(file) {
     throw error;
   }
 
-  return convertImageWithSips(file.buffer, getUploadExtension(file) || ".jpg");
+  try {
+    return await convertImageWithSips(file.buffer, getUploadExtension(file) || ".jpg");
+  } catch (error) {
+    // 非 HEIC 图片在预处理失败时回退为原图，避免 Linux 服务器缺少 sips 时直接识别失败。
+    console.warn("Image preprocessing skipped:", error.message);
+    return { buffer: file.buffer, mimetype: file.mimetype === "image/jpg" ? "image/jpeg" : file.mimetype };
+  }
 }
 
 async function analyzeImageWithOpenAI(file, prompt, imageUrl) {
@@ -367,7 +390,7 @@ function ensureZhipuVisionModel() {
   }
 }
 
-async function analyzeImageWithZhipu(file, prompt, base64Image) {
+async function analyzeImageWithZhipu(file, prompt, imageUrl) {
   ensureZhipuVisionModel();
 
   const response = await zhipuClient.chat.completions.create({
@@ -376,7 +399,7 @@ async function analyzeImageWithZhipu(file, prompt, base64Image) {
       {
         role: "user",
         content: [
-          { type: "image_url", image_url: { url: base64Image } },
+          { type: "image_url", image_url: { url: imageUrl } },
           { type: "text", text: prompt }
         ]
       }
@@ -409,7 +432,7 @@ async function analyzeImageWithVisionModel(file) {
   const client = aiProvider === "zhipu" ? zhipuClient : aiProvider === "mimo" ? mimoClient : openaiClient;
   if (!client) {
     const requiredKey =
-      aiProvider === "zhipu" ? "ZHIPUAI_API_KEY" : aiProvider === "mimo" ? "XIAOMI_API_KEY" : "OPENAI_API_KEY";
+      aiProvider === "zhipu" ? "ZHIPUAI_API_KEY" : aiProvider === "mimo" ? "XIAOMI_API_KEY 或 XIAOMI_MIMO_TOKEN" : "OPENAI_API_KEY";
     const error = new Error(`缺少 ${requiredKey}，请先在 .env 中配置后再识别真实图片。`);
     error.statusCode = 503;
     throw error;
@@ -459,7 +482,7 @@ async function analyzeImageWithVisionModel(file) {
 
   const modelText =
     aiProvider === "zhipu"
-      ? await analyzeImageWithZhipu(file, prompt, base64)
+      ? await analyzeImageWithZhipu(file, prompt, imageUrl)
       : aiProvider === "mimo"
         ? await analyzeImageWithMimo(file, prompt, imageUrl)
       : await analyzeImageWithOpenAI(file, prompt, imageUrl);
@@ -467,7 +490,7 @@ async function analyzeImageWithVisionModel(file) {
   const objects = Array.isArray(parsed.objects) ? parsed.objects.map(normalizeVisionObject) : [];
 
   if (!objects.length) {
-    const error = new Error("视觉模型没有识别到具体可用物体，请换一张更清晰的图片。");
+    const error = new Error("视觉模型已返回结果，但没有识别到可用于规划的具体物体。请上传包含杯子、书、手机、瓶子等清晰桌面物体的图片。");
     error.statusCode = 422;
     throw error;
   }

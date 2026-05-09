@@ -2,10 +2,12 @@ import { useState } from "react";
 import LogPanel from "./LogPanel";
 import PerceptionPanel from "./PerceptionPanel";
 import PlanPanel from "./PlanPanel";
+import WorldStatePanel from "./WorldStatePanel";
 
 const tabs = [
   { id: "plan", label: "AI 规划步骤" },
   { id: "objects", label: "识别物体列表" },
+  { id: "worldState", label: "World State" },
   { id: "logs", label: "执行日志" }
 ];
 
@@ -15,6 +17,7 @@ export default function BottomInspector({
   failure,
   plan,
   currentStep,
+  worldState,
   objects,
   summary,
   sceneDescription,
@@ -26,16 +29,18 @@ export default function BottomInspector({
 
   return (
     <section className="rounded-lg border border-line bg-white p-3 shadow-soft">
-      <div className="mb-3 flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+      <div className="mb-3 rounded-lg border border-slate-200 bg-panel p-1">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
-              activeTab === tab.id ? "bg-ink text-white" : "bg-panel text-slate-600 hover:bg-slate-100"
+            type="button"
+            className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-semibold transition ${
+              activeTab === tab.id ? "bg-ink text-white shadow-sm" : "text-slate-600 hover:bg-white"
             }`}
             onClick={() => setActiveTab(tab.id)}
           >
-            {tab.label}
+            <span>{tab.label}</span>
+            {activeTab === tab.id ? <span className="text-xs opacity-80">当前</span> : null}
           </button>
         ))}
       </div>
@@ -58,6 +63,7 @@ export default function BottomInspector({
             imagePreview={imagePreview}
           />
         ) : null}
+        {activeTab === "worldState" ? <WorldStatePanel worldState={worldState} objectCount={objects.length} /> : null}
         {activeTab === "logs" ? <LogPanel logs={logs} result={result} /> : null}
       </div>
     </section>
