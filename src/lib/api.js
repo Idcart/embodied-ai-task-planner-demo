@@ -80,3 +80,31 @@ export function executeHardwareStep(payload) {
 export function executeHardwarePlan(payload) {
   return postJson("/hardware/execute-plan", payload);
 }
+
+export function saveEpisode(payload) {
+  return postJson("/episodes/save", payload);
+}
+
+export function getEpisodes() {
+  return fetch(apiUrl("/episodes")).then(async (response) => {
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || data.message || `请求失败：${response.status}`);
+    }
+    return data;
+  });
+}
+
+export function getEpisode(episodeId) {
+  return fetch(apiUrl("/episodes/" + episodeId)).then(async (response) => {
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || data.message || `请求失败：${response.status}`);
+    }
+    return data;
+  });
+}
+
+export function getEpisodeDownloadUrl(episodeId) {
+  return apiUrl("/episodes/" + episodeId + "/download");
+}

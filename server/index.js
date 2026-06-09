@@ -40,6 +40,9 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: uploadMaxFileSizeMb * 1024 * 1024 }
 });
+const dataRoot = path.resolve(__dirname, "../data");
+const episodeDir = path.join(dataRoot, "episodes");
+const uploadDir = path.join(dataRoot, "uploads");
 const configuredAiProvider =
   process.env.AI_PROVIDER ||
   (process.env.ZHIPUAI_API_KEY || process.env.ZHIPU_API_KEY
@@ -296,6 +299,126 @@ function getUploadExtension(file) {
   if (file.mimetype === "image/heic") return ".heic";
   if (file.mimetype === "image/heif") return ".heif";
   return "";
+}
+
+async function saveUploadedImageForEpisode(file) {
+  if (!file) return null;
+  await fs.mkdir(uploadDir, { recursive: true });
+  const extension = getUploadExtension(file) || ".jpg";
+  const fileName = "upload_" + Date.now() + "_" + randomUUID().slice(0, 8) + extension;
+  const outputPath = path.join(uploadDir, fileName);
+  await fs.writeFile(outputPath, file.buffer);
+  return path.relative(path.resolve(__dirname, ".."), outputPath);
+}
+
+function makeEpisodeId() {
+  const compactTime = new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+  return "episode_" + compactTime + "_" + randomUUID().slice(0, 8);
+}
+
+function buildEpisodeSummary(episode) {
+  const objects = Array.isArray(episode.objects) ? episode.objects : [];
+  return {
+    episode_id: episode.episode_id,
+    task_description: episode.user_task_instruction,
+    scene_type: episode.multimodal_perception_result?.source || "desktop",
+    object_count: objects.length,
+    main_objects: objects.map((object) => object.name || object.type).filter(Boolean).slice(0, 8),
+    success: episode.success,
+    failure_type: episode.success ? null : "unknown",
+    quality_score: episode.data_quality?.sample_quality_score || 0,
+    is_training_ready: Boolean(episode.data_quality?.is_training_ready),
+    created_at: episode.created_at
+  };
+}
+
+function normalizeEpisodeObject(object = {}) {
+  return {
+    ...object,
+    bbox_2d: object.bbox || object.boundingBox || object.box || null,
+    position_3d: object.worldPosition || object.position3D || object.position || null
+  };
+}
+
+function buildEpisodeQuality(episode) {
+  const objects = Array.isArray(episode.objects) ? episode.objects : [];
+  const hasImage = Boolean(episode.uploaded_image_path);
+  const hasObjects = objects.length > 0;
+  const has3D = objects.some((object) => object.position_3d && typeof object.position_3d.x === "number");
+  const hasPlan = Array.isArray(episode.task_plan_steps) && episode.task_plan_steps.length > 1;
+  const imageQuality = hasImage ? 0.75 : 0.55;
+  const objectQuality = hasObjects ? 0.8 : 0.2;
+  const spatialQuality = has3D ? 0.82 : 0.35;
+  const planQuality = hasPlan ? 0.84 : 0.25;
+  const executionQuality = episode.success ? 0.9 : 0.35;
+  const knownIssues = [];
+
+  if (!episode.user_task_instruction) knownIssues.push("缺少用户任务指令");
+  if (!hasObjects) knownIssues.push("未记录识别物体");
+  if (!has3D) knownIssues.push("缺少物体 3D 坐标");
+  if (!hasPlan) knownIssues.push("缺少有效任务规划步骤");
+  if (!episode.success && episode.failure_reason) knownIssues.push(episode.failure_reason);
+
+  const sampleScore = Number(((imageQuality + objectQuality + spatialQuality + planQuality + executionQuality) / 5).toFixed(2));
+  return {
+    sample_quality_score: sampleScore,
+    image_quality_score: imageQuality,
+    object_detection_quality_score: objectQuality,
+    spatial_mapping_quality_score: spatialQuality,
+    task_plan_quality_score: planQuality,
+    execution_quality_score: executionQuality,
+    known_issues: knownIssues,
+    is_training_ready: sampleScore > 0.75 && episode.success && knownIssues.length === 0
+  };
+}
+
+function buildFailureSample(episode) {
+  if (episode.success) {
+    return {
+      is_failure_sample: false,
+      failure_type: null,
+      failure_reason: null,
+      recoverable: null,
+      recommended_fix: null
+    };
+  }
+
+  return {
+    is_failure_sample: true,
+    failure_type: episode.failure_reason ? "simulation_error" : "unknown",
+    failure_reason: episode.failure_reason || "未知失败原因",
+    recoverable: true,
+    recommended_fix: "检查感知结果、目标物体匹配、目标区域和仿真执行日志。"
+  };
+}
+
+async function saveEpisode(payload = {}) {
+  await fs.mkdir(episodeDir, { recursive: true });
+  const now = new Date().toISOString();
+  const objects = (payload.objects || []).map(normalizeEpisodeObject);
+  const episode = {
+    data_version: "EIRDS-0.1",
+    episode_id: makeEpisodeId(),
+    created_at: now,
+    updated_at: now,
+    user_task_instruction: payload.task || payload.user_task_instruction || "",
+    uploaded_image_path: payload.uploaded_image_path || null,
+    multimodal_perception_result: payload.perception_result || null,
+    objects,
+    target_position: payload.target_position || null,
+    task_plan_steps: payload.plan || [],
+    simulation_action_steps: payload.simulation_action_steps || payload.plan || [],
+    execution_result: payload.execution_result || null,
+    success: Boolean(payload.success),
+    failure_reason: payload.failure_reason || null,
+    finalized: true
+  };
+  episode.data_quality = buildEpisodeQuality(episode);
+  episode.failure_sample = buildFailureSample(episode);
+  episode.episode_summary = buildEpisodeSummary(episode);
+  const filePath = path.join(episodeDir, episode.episode_id + ".json");
+  await fs.writeFile(filePath, JSON.stringify(episode, null, 2), "utf8");
+  return episode;
 }
 
 function isHeicLike(file) {
@@ -642,15 +765,43 @@ function inferActionType(task = "") {
   return "find";
 }
 
+function extractTargetPhrase(task = "") {
+  const normalized = task.trim().toLowerCase();
+  return (
+    normalized.match(/把(.+?)(?:移动到|移到|移动|放到|放入|放进|放|拿到|拿|找到|找|清理)/)?.[1]?.trim() ||
+    normalized.match(/将(.+?)(?:移动到|移到|移动|放到|放入|放进|放|拿到|拿|找到|找|清理)/)?.[1]?.trim() ||
+    ""
+  );
+}
+
+function extractDestinationPhrase(task = "") {
+  const normalized = task.trim().toLowerCase();
+  return (
+    normalized.match(/(?:移动到|移到|放到|放入|放进|拿到|到|至|进|入)(.+)$/)?.[1]?.trim() ||
+    ""
+  );
+}
+
+function applyRelativeCorner(point, phrase = "") {
+  if (!point) return null;
+  const offset = { x: 0, y: 0 };
+  if (phrase.includes("右")) offset.x = 55;
+  if (phrase.includes("左")) offset.x = -55;
+  if (phrase.includes("上")) offset.y = -55;
+  if (phrase.includes("下")) offset.y = 55;
+  if (!offset.x && !offset.y && /(旁边|边上|附近|旁|边)/.test(phrase)) {
+    offset.x = 65;
+  }
+
+  return {
+    x: Math.max(30, Math.min(SCENE_CANVAS.width - 30, point.x + offset.x)),
+    y: Math.max(30, Math.min(SCENE_CANVAS.height - 30, point.y + offset.y))
+  };
+}
+
 function inferDestination(task = "", objects = [], targetObject = null) {
   const normalized = task.trim().toLowerCase();
-  if (normalized.includes("右上角")) return { destination: "桌子右上角", destinationPosition: { x: 500, y: 70 } };
-  if (normalized.includes("左上角")) return { destination: "桌子左上角", destinationPosition: { x: 80, y: 70 } };
-  if (normalized.includes("右下角")) return { destination: "桌子右下角", destinationPosition: { x: 520, y: 320 } };
-  if (normalized.includes("左下角")) return { destination: "桌子左下角", destinationPosition: { x: 80, y: 320 } };
-
-  const destinationPhrase =
-    normalized.match(/(?:到|至|进|入|放到|放入|移动到)(.+)$/)?.[1]?.trim() || normalized;
+  const destinationPhrase = extractDestinationPhrase(task) || normalized;
   const destinationObject = objects.find((object) => {
     const name = String(object.name || "").toLowerCase();
     const type = String(object.type || "").toLowerCase();
@@ -659,25 +810,40 @@ function inferDestination(task = "", objects = [], targetObject = null) {
   });
 
   if (destinationObject) {
+    const objectPoint = getObjectPoint(destinationObject);
+    const isRelativePlacement = /左|右|上|下|旁边|边上|附近|旁|边/.test(destinationPhrase);
     return {
-      destination: destinationObject.name,
+      destination: destinationPhrase || destinationObject.name,
       destinationType: destinationObject.type,
-      destinationPosition: getObjectPoint(destinationObject)
+      destinationPosition: isRelativePlacement ? applyRelativeCorner(objectPoint, destinationPhrase) : objectPoint
     };
   }
+
+  if (normalized.includes("右上角")) return { destination: "桌子右上角", destinationPosition: { x: 500, y: 70 } };
+  if (normalized.includes("左上角")) return { destination: "桌子左上角", destinationPosition: { x: 80, y: 70 } };
+  if (normalized.includes("右下角")) return { destination: "桌子右下角", destinationPosition: { x: 520, y: 320 } };
+  if (normalized.includes("左下角")) return { destination: "桌子左下角", destinationPosition: { x: 80, y: 320 } };
 
   return { destination: "当前位置", destinationPosition: null };
 }
 
 function matchTaskObject(task = "", objects = []) {
   const normalized = task.trim().toLowerCase();
+  const targetPhrase = extractTargetPhrase(task);
   const objectCandidates = objects.filter((object) => !["table", "desk", "surface", "floor", "wall"].includes(String(object.type || "").toLowerCase()));
+  const targetSearchText = targetPhrase || normalized;
+
+  const matchedByTargetPhrase = objectCandidates.find((object) => {
+    const name = String(object.name || "").toLowerCase();
+    const type = String(object.type || "").toLowerCase();
+    return (name && targetSearchText.includes(name)) || (type && targetSearchText.includes(type));
+  });
+
+  if (matchedByTargetPhrase) return matchedByTargetPhrase;
+
+  if (targetPhrase) return null;
+
   return (
-    objectCandidates.find((object) => {
-      const name = String(object.name || "").toLowerCase();
-      const type = String(object.type || "").toLowerCase();
-      return (name && normalized.includes(name)) || (type && normalized.includes(type));
-    }) ||
     objectCandidates.find((object) => {
       const description = String(object.description || "").toLowerCase();
       return description && normalized.includes(description);
@@ -807,7 +973,7 @@ function buildPlan(task, objects) {
   const destinationObject = intent.destinationType ? findObject(objects, intent.destinationType, intent.destination) : null;
   const understanding = buildUnderstanding(task, intent, objects, targetObject);
   const destinationPosition =
-    (destinationObject ? getObjectPoint(destinationObject) : null) || intent.destinationPosition || null;
+    intent.destinationPosition || (destinationObject ? getObjectPoint(destinationObject) : null) || null;
 
   if (intent.actionType !== "clean" && !targetObject) {
     const detectedNames = objects.length ? objects.map((item) => item.name).join("、") : "暂无识别结果";
@@ -984,7 +1150,7 @@ function buildPlan(task, objects) {
 
   const plan = [
     makeStep("observe_scene", "桌面", "读取感知结果并构建桌面语义场景"),
-    makeStep("locate_target", intent.targetName, `定位目标物体：${intent.targetName}`, {
+    makeStep("locate_target_object", intent.targetName, `定位需要移动的目标物体：${intent.targetName}`, {
       objectId: targetObject?.id,
       position: targetObject ? getObjectPoint(targetObject) : null
     }),
@@ -1007,7 +1173,7 @@ function buildPlan(task, objects) {
       objectId: targetObject?.id,
       position: targetObject ? getObjectPoint(targetObject) : null
     }),
-    makeStep("move_to_target", intent.destination, `携带${intent.targetName}移动到${intent.destination}`, {
+    makeStep("move_with_object_to_destination", intent.destination, `携带${intent.targetName}移动到${intent.destination}`, {
       objectId: targetObject?.id,
       position: destinationPosition,
       targetPosition: destinationPosition,
@@ -1076,12 +1242,14 @@ app.post("/api/perception", upload.single("image"), async (req, res) => {
       return;
     }
 
+    const uploadedImagePath = await saveUploadedImageForEpisode(req.file);
     const result = await analyzeImageWithVisionModel(req.file);
     res.json({
       success: true,
       sceneId: `uploaded_${Date.now()}`,
       mode,
       model: visionModel,
+      uploadedImagePath,
       sceneDescription: result.sceneDescription,
       objects: result.objects,
       annotations: result.objects.map((object) => ({
@@ -1113,6 +1281,74 @@ app.post("/api/perception", upload.single("image"), async (req, res) => {
       sceneDescription: "",
       objects: []
     });
+  }
+});
+
+app.post("/api/episodes/save", async (req, res, next) => {
+  try {
+    const episode = await saveEpisode(req.body || {});
+    res.json({
+      success: true,
+      episode_id: episode.episode_id,
+      episode
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/episodes", async (_req, res, next) => {
+  try {
+    await fs.mkdir(episodeDir, { recursive: true });
+    const fileNames = await fs.readdir(episodeDir);
+    const episodes = [];
+
+    for (const fileName of fileNames.filter((name) => name.endsWith(".json"))) {
+      try {
+        const content = await fs.readFile(path.join(episodeDir, fileName), "utf8");
+        const episode = JSON.parse(content);
+        episodes.push({
+          episode_id: episode.episode_id || fileName.replace(/\.json$/, ""),
+          file_name: fileName,
+          summary: episode.episode_summary || buildEpisodeSummary(episode),
+          data_quality: episode.data_quality || null,
+          success: Boolean(episode.success),
+          created_at: episode.created_at || null
+        });
+      } catch (error) {
+        episodes.push({
+          episode_id: fileName.replace(/\.json$/, ""),
+          file_name: fileName,
+          parse_error: error.message
+        });
+      }
+    }
+
+    episodes.sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")));
+    res.json({ success: true, episodes });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/episodes/:episodeId", async (req, res, next) => {
+  try {
+    const episodeId = String(req.params.episodeId || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    const filePath = path.join(episodeDir, episodeId + ".json");
+    const content = await fs.readFile(filePath, "utf8");
+    res.type("application/json").send(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.get("/api/episodes/:episodeId/download", async (req, res, next) => {
+  try {
+    const episodeId = String(req.params.episodeId || "").replace(/[^a-zA-Z0-9_-]/g, "");
+    const filePath = path.join(episodeDir, episodeId + ".json");
+    res.download(filePath, episodeId + ".json");
+  } catch (error) {
+    next(error);
   }
 });
 

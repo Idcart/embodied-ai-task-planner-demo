@@ -1,0 +1,432 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260514084315_c811958c",
+  "created_at": "2026-05-14T08:43:15.443Z",
+  "updated_at": "2026-05-14T08:43:15.443Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778748187286_68ff4487.jpg",
+  "multimodal_perception_result": {
+    "success": true,
+    "taskId": "vision_1778748187285_c1d20833",
+    "imageHash": "9191c52654a70d37952f82f8ad39b223f04485deb716c8e4c8ccc55ef7db0e79",
+    "cached": false,
+    "sceneId": "uploaded_1778748194838",
+    "mode": "uploaded-image",
+    "model": "mimo-v2-flash",
+    "fallback": false,
+    "fallbackReason": null,
+    "uploadedImagePath": "data/uploads/upload_1778748187286_68ff4487.jpg",
+    "sceneDescription": "视觉模型已完成场景识别。",
+    "objects": [
+      {
+        "id": "object_1",
+        "name": "笔记本电脑",
+        "type": "object",
+        "icon": "object",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 50
+        },
+        "confidence": 1,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 200
+        },
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_2",
+        "name": "手机",
+        "type": "object",
+        "icon": "object",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 50
+        },
+        "confidence": 1,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 200
+        },
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_3",
+        "name": "咖啡杯",
+        "type": "object",
+        "icon": "object",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 50
+        },
+        "confidence": 1,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 200
+        },
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_4",
+        "name": "鼠标",
+        "type": "object",
+        "icon": "object",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 50
+        },
+        "confidence": 1,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 200
+        },
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_5",
+        "name": "键盘",
+        "type": "object",
+        "icon": "object",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 50
+        },
+        "confidence": 1,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 200
+        },
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "object_1",
+        "label": "笔记本电脑",
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 1
+      },
+      {
+        "id": "object_2",
+        "label": "手机",
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 1
+      },
+      {
+        "id": "object_3",
+        "label": "咖啡杯",
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 1
+      },
+      {
+        "id": "object_4",
+        "label": "鼠标",
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 1
+      },
+      {
+        "id": "object_5",
+        "label": "键盘",
+        "bbox": {
+          "x": 43,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 1
+      }
+    ],
+    "summary": "真实视觉模型已识别到 5 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "object_1",
+      "name": "笔记本电脑",
+      "type": "object",
+      "bbox_2d": {
+        "x": 43,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 1
+    },
+    {
+      "id": "object_2",
+      "name": "手机",
+      "type": "object",
+      "bbox_2d": {
+        "x": 43,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 1
+    },
+    {
+      "id": "object_3",
+      "name": "咖啡杯",
+      "type": "object",
+      "bbox_2d": {
+        "x": 43,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 1
+    },
+    {
+      "id": "object_4",
+      "name": "鼠标",
+      "type": "object",
+      "bbox_2d": {
+        "x": 43,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 1
+    },
+    {
+      "id": "object_5",
+      "name": "键盘",
+      "type": "object",
+      "bbox_2d": {
+        "x": 43,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 1
+    }
+  ],
+  "target_position": null,
+  "task_plan_steps": [],
+  "simulation_action_steps": [],
+  "execution_result": null,
+  "success": false,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.64,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 1,
+    "spatial_mapping_quality_score": 0.9,
+    "task_plan_quality_score": 0.15,
+    "execution_quality_score": 0.25,
+    "known_issues": [
+      "缺少任务规划步骤",
+      "缺少仿真动作步骤",
+      "缺少执行结果",
+      "任务执行未成功"
+    ],
+    "is_training_ready": false
+  },
+  "failure_sample": {
+    "is_failure_sample": true,
+    "failure_type": "planning_error",
+    "failure_reason": "样本未成功完成或缺少执行结果。",
+    "recoverable": true,
+    "recommended_fix": "补充明确任务目标，重新生成动作计划。"
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260514084315_c811958c",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 5,
+    "main_objects": [
+      "笔记本电脑",
+      "手机",
+      "咖啡杯",
+      "鼠标",
+      "键盘"
+    ],
+    "task_type": "move_object",
+    "success": false,
+    "failure_type": "planning_error",
+    "quality_score": 0.64,
+    "is_training_ready": false,
+    "created_at": "2026-05-14T08:43:15.443Z",
+    "duration_ms": 0
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-14T08:43:15.443Z",
+      "data": {
+        "sceneDescription": "视觉模型已完成场景识别。",
+        "summary": "真实视觉模型已识别到 5 个具体物体"
+      }
+    }
+  ],
+  "finalized": false
+}

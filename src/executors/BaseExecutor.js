@@ -10,12 +10,14 @@ import { getTargetRegion, scenePointToWorld } from "../lib/worldState";
 const hardwareActionMap = {
   observe_scene: "observe",
   locate_target: "move_to",
+  locate_target_object: "move_to",
   check_operability: "verify",
   check_target_area: "verify",
   move_to_object: "move_to",
   pick_object: "pick",
   pick: "pick",
   move_to_target: "move_to",
+  move_with_object_to_destination: "move_to",
   place_object: "place",
   place: "place",
   verify_result: "verify",
@@ -106,7 +108,7 @@ export default class BaseExecutor {
       };
     }
 
-    if (step.action === "move_to_target") {
+    if (step.action === "move_to_target" || step.action === "move_with_object_to_destination") {
       const regionCoord = this.getRegionCoord(step.targetRegion || step.targetArea || this.intent?.destination);
       const position = regionCoord || (step.targetPosition ? virtual3DToRobotCoord(this.normalizeVirtualPosition(step.targetPosition), this.calibrationConfig) : null);
       return {

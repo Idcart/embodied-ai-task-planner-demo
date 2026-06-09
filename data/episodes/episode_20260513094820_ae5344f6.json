@@ -1,0 +1,1084 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260513094820_ae5344f6",
+  "created_at": "2026-05-13T09:48:20.599Z",
+  "updated_at": "2026-05-13T09:49:15.470Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778665645326_9d8e86f4.jpg",
+  "multimodal_perception_result": {
+    "success": true,
+    "sceneId": "uploaded_1778665700565",
+    "mode": "uploaded-image",
+    "model": "glm-4.6v",
+    "uploadedImagePath": "data/uploads/upload_1778665645326_9d8e86f4.jpg",
+    "sceneDescription": "儿童卧室，蓝色墙壁，配有床、衣柜、书桌、椅子等家具，床上摆放熊猫玩偶和枕头，床前有足球，书桌上有台灯和书，整体布置温馨活泼",
+    "objects": [
+      {
+        "id": "object_1",
+        "name": "熊猫玩偶",
+        "type": "stuffed_toy",
+        "icon": "stuffed_toy",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 65,
+          "yPercent": 45
+        },
+        "confidence": 0.95,
+        "operable": true,
+        "description": "黑白相间的熊猫玩偶，戴紫色领结",
+        "affordance": [
+          "pickable",
+          "movable"
+        ],
+        "risk": "柔软，可能变形",
+        "status": "detected",
+        "scenePosition": {
+          "x": 390,
+          "y": 180
+        },
+        "bbox": {
+          "x": 58,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_2",
+        "name": "足球",
+        "type": "soccer_ball",
+        "icon": "soccer_ball",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_center",
+          "xPercent": 45,
+          "yPercent": 85
+        },
+        "confidence": 0.9,
+        "operable": true,
+        "description": "黑白条纹的足球",
+        "affordance": [
+          "pickable",
+          "movable"
+        ],
+        "risk": "可能滚动",
+        "status": "detected",
+        "scenePosition": {
+          "x": 270,
+          "y": 340
+        },
+        "bbox": {
+          "x": 38,
+          "y": 78,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_3",
+        "name": "枕头",
+        "type": "pillow",
+        "icon": "pillow",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_left",
+          "xPercent": 25,
+          "yPercent": 50
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "白色带灰色图案的枕头",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "柔软，可能滑落",
+        "status": "detected",
+        "scenePosition": {
+          "x": 150,
+          "y": 200
+        },
+        "bbox": {
+          "x": 18,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_4",
+        "name": "储物箱",
+        "type": "storage_box",
+        "icon": "storage_box",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_left",
+          "xPercent": 25,
+          "yPercent": 75
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "米色带绿色装饰的储物箱",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "可能重",
+        "status": "detected",
+        "scenePosition": {
+          "x": 150,
+          "y": 300
+        },
+        "bbox": {
+          "x": 18,
+          "y": 68,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_5",
+        "name": "椅子",
+        "type": "chair",
+        "icon": "chair",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 75,
+          "yPercent": 60
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "白色带绿色坐垫的椅子",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "可能滑动",
+        "status": "detected",
+        "scenePosition": {
+          "x": 450,
+          "y": 240
+        },
+        "bbox": {
+          "x": 68,
+          "y": 53,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_6",
+        "name": "台灯",
+        "type": "lamp",
+        "icon": "lamp",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "top_right",
+          "xPercent": 90,
+          "yPercent": 30
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "白色台灯",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "可能倾倒",
+        "status": "detected",
+        "scenePosition": {
+          "x": 540,
+          "y": 120
+        },
+        "bbox": {
+          "x": 82,
+          "y": 23,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_7",
+        "name": "书",
+        "type": "book",
+        "icon": "book",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "top_right",
+          "xPercent": 85,
+          "yPercent": 50
+        },
+        "confidence": 0.7,
+        "operable": true,
+        "description": "书桌上的书",
+        "affordance": [
+          "pickable"
+        ],
+        "risk": "可能散落",
+        "status": "detected",
+        "scenePosition": {
+          "x": 510,
+          "y": 200
+        },
+        "bbox": {
+          "x": 74,
+          "y": 43.5,
+          "width": 22,
+          "height": 13
+        }
+      },
+      {
+        "id": "object_8",
+        "name": "被子",
+        "type": "blanket",
+        "icon": "blanket",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 50,
+          "yPercent": 60
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "黑白条纹的被子",
+        "affordance": [
+          "movable"
+        ],
+        "risk": "柔软，可能滑落",
+        "status": "detected",
+        "scenePosition": {
+          "x": 300,
+          "y": 240
+        },
+        "bbox": {
+          "x": 43,
+          "y": 53,
+          "width": 14,
+          "height": 14
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "object_1",
+        "label": "熊猫玩偶",
+        "bbox": {
+          "x": 58,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.95
+      },
+      {
+        "id": "object_2",
+        "label": "足球",
+        "bbox": {
+          "x": 38,
+          "y": 78,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      },
+      {
+        "id": "object_3",
+        "label": "枕头",
+        "bbox": {
+          "x": 18,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_4",
+        "label": "储物箱",
+        "bbox": {
+          "x": 18,
+          "y": 68,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_5",
+        "label": "椅子",
+        "bbox": {
+          "x": 68,
+          "y": 53,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_6",
+        "label": "台灯",
+        "bbox": {
+          "x": 82,
+          "y": 23,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_7",
+        "label": "书",
+        "bbox": {
+          "x": 74,
+          "y": 43.5,
+          "width": 22,
+          "height": 13
+        },
+        "confidence": 0.7
+      },
+      {
+        "id": "object_8",
+        "label": "被子",
+        "bbox": {
+          "x": 43,
+          "y": 53,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      }
+    ],
+    "summary": "真实视觉模型已识别到 8 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "object_1",
+      "name": "熊猫玩偶",
+      "type": "stuffed_toy",
+      "bbox_2d": {
+        "x": 58,
+        "y": 38,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 65,
+        "yPercent": 45
+      },
+      "position_3d": {
+        "x": 1.5,
+        "y": 0.34,
+        "z": -0.5
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable"
+      ],
+      "risk": "柔软，可能变形",
+      "confidence": 0.95
+    },
+    {
+      "id": "object_2",
+      "name": "足球",
+      "type": "soccer_ball",
+      "bbox_2d": {
+        "x": 38,
+        "y": 78,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "bottom_center",
+        "xPercent": 45,
+        "yPercent": 85
+      },
+      "position_3d": {
+        "x": -0.5,
+        "y": 0.34,
+        "z": 3.5
+      },
+      "current_region": "bottom_center",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable"
+      ],
+      "risk": "可能滚动",
+      "confidence": 0.9
+    },
+    {
+      "id": "object_3",
+      "name": "枕头",
+      "type": "pillow",
+      "bbox_2d": {
+        "x": 18,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_left",
+        "xPercent": 25,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 2.5,
+        "y": 0.34,
+        "z": 1
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "柔软，可能滑落",
+      "confidence": 0.8
+    },
+    {
+      "id": "object_4",
+      "name": "储物箱",
+      "type": "storage_box",
+      "bbox_2d": {
+        "x": 18,
+        "y": 68,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "bottom_left",
+        "xPercent": 25,
+        "yPercent": 75
+      },
+      "position_3d": {
+        "x": -2.5,
+        "y": 0.34,
+        "z": 2.5
+      },
+      "current_region": "bottom_left",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "可能重",
+      "confidence": 0.8
+    },
+    {
+      "id": "object_5",
+      "name": "椅子",
+      "type": "chair",
+      "bbox_2d": {
+        "x": 68,
+        "y": 53,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 75,
+        "yPercent": 60
+      },
+      "position_3d": {
+        "x": 2.5,
+        "y": 0.34,
+        "z": 1
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "可能滑动",
+      "confidence": 0.8
+    },
+    {
+      "id": "object_6",
+      "name": "台灯",
+      "type": "lamp",
+      "bbox_2d": {
+        "x": 82,
+        "y": 23,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "top_right",
+        "xPercent": 90,
+        "yPercent": 30
+      },
+      "position_3d": {
+        "x": 4,
+        "y": 0.34,
+        "z": -2
+      },
+      "current_region": "top_right",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "可能倾倒",
+      "confidence": 0.8
+    },
+    {
+      "id": "object_7",
+      "name": "书",
+      "type": "book",
+      "bbox_2d": {
+        "x": 74,
+        "y": 43.5,
+        "width": 22,
+        "height": 13
+      },
+      "position_2d": {
+        "region": "top_right",
+        "xPercent": 85,
+        "yPercent": 50
+      },
+      "position_3d": {
+        "x": 3.5,
+        "y": 0.34,
+        "z": 0
+      },
+      "current_region": "top_right",
+      "operable": true,
+      "affordance": [
+        "pickable"
+      ],
+      "risk": "可能散落",
+      "confidence": 0.7
+    },
+    {
+      "id": "object_8",
+      "name": "被子",
+      "type": "blanket",
+      "bbox_2d": {
+        "x": 43,
+        "y": 53,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 50,
+        "yPercent": 60
+      },
+      "position_3d": {
+        "x": 0,
+        "y": 0.34,
+        "z": 1
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable"
+      ],
+      "risk": "柔软，可能滑落",
+      "confidence": 0.8
+    }
+  ],
+  "target_position": {
+    "x": 450,
+    "y": 240
+  },
+  "task_plan_steps": [
+    {
+      "step": 1,
+      "action": "locate_target_object",
+      "target": "枕头",
+      "description": "定位需要移动的目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      }
+    },
+    {
+      "step": 2,
+      "action": "move_to_object",
+      "target": "枕头",
+      "description": "机器人移动到目标物体当前位置",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      }
+    },
+    {
+      "step": 3,
+      "action": "pick_object",
+      "target": "枕头",
+      "description": "抓取目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      }
+    },
+    {
+      "step": 4,
+      "action": "move_with_object_to_destination",
+      "target": "椅子",
+      "description": "机器人携带目标物体移动到目的地",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 5,
+      "action": "place_object",
+      "target": "椅子",
+      "description": "在目的地放下目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 6,
+      "action": "verify_result",
+      "target": "任务结果",
+      "description": "验证目标物体是否到达目的地",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 7,
+      "action": "done",
+      "target": "任务完成",
+      "description": "任务完成",
+      "status": "waiting",
+      "objectId": "object_3"
+    }
+  ],
+  "simulation_action_steps": [
+    {
+      "step": 1,
+      "action": "locate_target_object",
+      "description": "定位需要移动的目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "targetPosition": null,
+      "targetArea": null
+    },
+    {
+      "step": 2,
+      "action": "move_to_object",
+      "description": "机器人移动到目标物体当前位置",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "targetPosition": null,
+      "targetArea": null
+    },
+    {
+      "step": 3,
+      "action": "pick_object",
+      "description": "抓取目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "targetPosition": null,
+      "targetArea": null
+    },
+    {
+      "step": 4,
+      "action": "move_with_object_to_destination",
+      "description": "机器人携带目标物体移动到目的地",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 5,
+      "action": "place_object",
+      "description": "在目的地放下目标物体",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 6,
+      "action": "verify_result",
+      "description": "验证目标物体是否到达目的地",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": {
+        "x": 450,
+        "y": 240
+      },
+      "targetPosition": {
+        "x": 450,
+        "y": 240
+      },
+      "targetArea": "椅子"
+    },
+    {
+      "step": 7,
+      "action": "done",
+      "description": "任务完成",
+      "status": "waiting",
+      "objectId": "object_3",
+      "position": null,
+      "targetPosition": null,
+      "targetArea": null
+    }
+  ],
+  "execution_result": {
+    "success": true,
+    "status": "completed",
+    "message": "机器人已完成把枕头移动到椅子上",
+    "worldState": {
+      "robot": {
+        "position": {
+          "x": 2.633333333333333,
+          "y": 0.35,
+          "z": 1.15
+        },
+        "holdingObjectId": null
+      },
+      "objects": [
+        {
+          "id": "object_1",
+          "name": "熊猫玩偶",
+          "type": "stuffed_toy",
+          "position": {
+            "x": 1.5,
+            "y": 0.34,
+            "z": -0.5
+          },
+          "originalPosition": {
+            "x": 1.5,
+            "y": 0.34,
+            "z": -0.5
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_2",
+          "name": "足球",
+          "type": "soccer_ball",
+          "position": {
+            "x": -0.5,
+            "y": 0.34,
+            "z": 3.5
+          },
+          "originalPosition": {
+            "x": -0.5,
+            "y": 0.34,
+            "z": 3.5
+          },
+          "currentRegion": "bottom_center",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_3",
+          "name": "枕头",
+          "type": "pillow",
+          "position": {
+            "x": 2.5,
+            "y": 0.34,
+            "z": 1
+          },
+          "originalPosition": {
+            "x": -2.5,
+            "y": 0.34,
+            "z": 0
+          },
+          "currentRegion": "center_right",
+          "targetRegion": "center_right",
+          "isHeld": false,
+          "isPlaced": true,
+          "lastUpdatedAt": 1778665753964
+        },
+        {
+          "id": "object_4",
+          "name": "储物箱",
+          "type": "storage_box",
+          "position": {
+            "x": -2.5,
+            "y": 0.34,
+            "z": 2.5
+          },
+          "originalPosition": {
+            "x": -2.5,
+            "y": 0.34,
+            "z": 2.5
+          },
+          "currentRegion": "bottom_left",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_5",
+          "name": "椅子",
+          "type": "chair",
+          "position": {
+            "x": 2.5,
+            "y": 0.34,
+            "z": 1
+          },
+          "originalPosition": {
+            "x": 2.5,
+            "y": 0.34,
+            "z": 1
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_6",
+          "name": "台灯",
+          "type": "lamp",
+          "position": {
+            "x": 4,
+            "y": 0.34,
+            "z": -2
+          },
+          "originalPosition": {
+            "x": 4,
+            "y": 0.34,
+            "z": -2
+          },
+          "currentRegion": "top_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_7",
+          "name": "书",
+          "type": "book",
+          "position": {
+            "x": 3.5,
+            "y": 0.34,
+            "z": 0
+          },
+          "originalPosition": {
+            "x": 3.5,
+            "y": 0.34,
+            "z": 0
+          },
+          "currentRegion": "top_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        },
+        {
+          "id": "object_8",
+          "name": "被子",
+          "type": "blanket",
+          "position": {
+            "x": 0,
+            "y": 0.34,
+            "z": 1
+          },
+          "originalPosition": {
+            "x": 0,
+            "y": 0.34,
+            "z": 1
+          },
+          "currentRegion": "center",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1778665700056
+        }
+      ],
+      "execution": {
+        "status": "completed",
+        "currentStepIndex": 7,
+        "currentAction": "done",
+        "targetObjectId": "object_3",
+        "destinationRegion": "center_right",
+        "path": [
+          {
+            "x": 476,
+            "y": 44
+          },
+          {
+            "x": 126,
+            "y": 174
+          },
+          {
+            "x": 426,
+            "y": 214
+          }
+        ],
+        "startedAt": 1778665748706,
+        "completedAt": 1778665754574
+      },
+      "lastTask": "把枕头移动到椅子上",
+      "lastExecutionResult": {
+        "success": true,
+        "status": "completed",
+        "message": "机器人已完成把枕头移动到椅子上",
+        "finishedAt": 1778665754926
+      }
+    }
+  },
+  "success": true,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.96,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 0.92,
+    "spatial_mapping_quality_score": 1,
+    "task_plan_quality_score": 1,
+    "execution_quality_score": 1,
+    "known_issues": [],
+    "is_training_ready": true
+  },
+  "failure_sample": {
+    "is_failure_sample": false,
+    "failure_type": null,
+    "failure_reason": null,
+    "recoverable": false,
+    "recommended_fix": null
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260513094820_ae5344f6",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 8,
+    "main_objects": [
+      "熊猫玩偶",
+      "足球",
+      "枕头",
+      "储物箱",
+      "椅子",
+      "台灯"
+    ],
+    "task_type": "pick_and_place",
+    "success": true,
+    "failure_type": null,
+    "quality_score": 0.96,
+    "is_training_ready": true,
+    "created_at": "2026-05-13T09:48:20.599Z",
+    "duration_ms": 5868
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-13T09:48:20.599Z",
+      "data": {
+        "sceneDescription": "儿童卧室，蓝色墙壁，配有床、衣柜、书桌、椅子等家具，床上摆放熊猫玩偶和枕头，床前有足球，书桌上有台灯和书，整体布置温馨活泼",
+        "summary": "真实视觉模型已识别到 8 个具体物体"
+      }
+    },
+    {
+      "stage": "planning_completed",
+      "timestamp": "2026-05-13T09:48:58.349Z",
+      "data": {
+        "intent": {
+          "targetType": "pillow",
+          "targetName": "枕头",
+          "actionType": "move",
+          "destination": "椅子",
+          "destinationType": "chair",
+          "destinationPosition": {
+            "x": 450,
+            "y": 240
+          }
+        },
+        "executable": true
+      }
+    },
+    {
+      "stage": "simulation_completed",
+      "timestamp": "2026-05-13T09:49:15.469Z",
+      "data": {
+        "execution": {
+          "status": "completed",
+          "currentStepIndex": 7,
+          "currentAction": "done",
+          "targetObjectId": "object_3",
+          "destinationRegion": "center_right",
+          "path": [
+            {
+              "x": 476,
+              "y": 44
+            },
+            {
+              "x": 126,
+              "y": 174
+            },
+            {
+              "x": 426,
+              "y": 214
+            }
+          ],
+          "startedAt": 1778665748706,
+          "completedAt": 1778665754574
+        }
+      }
+    }
+  ],
+  "finalized": true
+}

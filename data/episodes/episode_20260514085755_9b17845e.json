@@ -1,0 +1,304 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260514085755_9b17845e",
+  "created_at": "2026-05-14T08:57:55.067Z",
+  "updated_at": "2026-05-14T08:57:55.067Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778749073399_c87d5b93.jpg",
+  "multimodal_perception_result": {
+    "success": true,
+    "taskId": "vision_1778749073398_497ee74f",
+    "imageHash": "9191c52654a70d37952f82f8ad39b223f04485deb716c8e4c8ccc55ef7db0e79",
+    "cached": false,
+    "sceneId": "uploaded_1778749074875",
+    "mode": "uploaded-image",
+    "model": "mimo-v2-flash",
+    "fallback": false,
+    "fallbackReason": null,
+    "uploadedImagePath": "data/uploads/upload_1778749073399_c87d5b93.jpg",
+    "sceneDescription": "视觉模型已完成场景识别。",
+    "objects": [
+      {
+        "id": "object_1",
+        "name": "cup",
+        "type": "cup",
+        "icon": "cup",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 80,
+          "height": 100
+        },
+        "position": {
+          "region": "bottom_right",
+          "xPercent": 100,
+          "yPercent": 100
+        },
+        "confidence": 0.92,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 600,
+          "y": 400
+        }
+      },
+      {
+        "id": "object_2",
+        "name": "bottle",
+        "type": "bottle",
+        "icon": "bottle",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 60,
+          "height": 100
+        },
+        "position": {
+          "region": "bottom_right",
+          "xPercent": 100,
+          "yPercent": 100
+        },
+        "confidence": 0.88,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 600,
+          "y": 400
+        }
+      },
+      {
+        "id": "object_3",
+        "name": "box",
+        "type": "box",
+        "icon": "box",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 100,
+          "height": 100
+        },
+        "position": {
+          "region": "bottom_right",
+          "xPercent": 100,
+          "yPercent": 100
+        },
+        "confidence": 0.95,
+        "operable": true,
+        "description": "视觉模型识别到的物体",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 600,
+          "y": 400
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "object_1",
+        "label": "cup",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 80,
+          "height": 100
+        },
+        "confidence": 0.92
+      },
+      {
+        "id": "object_2",
+        "label": "bottle",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 60,
+          "height": 100
+        },
+        "confidence": 0.88
+      },
+      {
+        "id": "object_3",
+        "label": "box",
+        "bbox": {
+          "x": 100,
+          "y": 100,
+          "width": 100,
+          "height": 100
+        },
+        "confidence": 0.95
+      }
+    ],
+    "summary": "真实视觉模型已识别到 3 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "object_1",
+      "name": "cup",
+      "type": "cup",
+      "bbox_2d": {
+        "x": 100,
+        "y": 100,
+        "width": 80,
+        "height": 100
+      },
+      "position_2d": {
+        "region": "bottom_right",
+        "xPercent": 100,
+        "yPercent": 100
+      },
+      "position_3d": {
+        "x": 4.8,
+        "y": 0.34,
+        "z": 4.8
+      },
+      "current_region": "bottom_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+      "confidence": 0.92
+    },
+    {
+      "id": "object_2",
+      "name": "bottle",
+      "type": "bottle",
+      "bbox_2d": {
+        "x": 100,
+        "y": 100,
+        "width": 60,
+        "height": 100
+      },
+      "position_2d": {
+        "region": "bottom_right",
+        "xPercent": 100,
+        "yPercent": 100
+      },
+      "position_3d": {
+        "x": 4.8,
+        "y": 0.34,
+        "z": 4.8
+      },
+      "current_region": "bottom_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+      "confidence": 0.88
+    },
+    {
+      "id": "object_3",
+      "name": "box",
+      "type": "box",
+      "bbox_2d": {
+        "x": 100,
+        "y": 100,
+        "width": 100,
+        "height": 100
+      },
+      "position_2d": {
+        "region": "bottom_right",
+        "xPercent": 100,
+        "yPercent": 100
+      },
+      "position_3d": {
+        "x": 4.8,
+        "y": 0.34,
+        "z": 4.8
+      },
+      "current_region": "bottom_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "confidence": 0.95
+    }
+  ],
+  "target_position": null,
+  "task_plan_steps": [],
+  "simulation_action_steps": [],
+  "execution_result": null,
+  "success": false,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.63,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 0.96,
+    "spatial_mapping_quality_score": 0.9,
+    "task_plan_quality_score": 0.15,
+    "execution_quality_score": 0.25,
+    "known_issues": [
+      "缺少任务规划步骤",
+      "缺少仿真动作步骤",
+      "缺少执行结果",
+      "任务执行未成功"
+    ],
+    "is_training_ready": false
+  },
+  "failure_sample": {
+    "is_failure_sample": true,
+    "failure_type": "planning_error",
+    "failure_reason": "样本未成功完成或缺少执行结果。",
+    "recoverable": true,
+    "recommended_fix": "补充明确任务目标，重新生成动作计划。"
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260514085755_9b17845e",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 3,
+    "main_objects": [
+      "cup",
+      "bottle",
+      "box"
+    ],
+    "task_type": "move_object",
+    "success": false,
+    "failure_type": "planning_error",
+    "quality_score": 0.63,
+    "is_training_ready": false,
+    "created_at": "2026-05-14T08:57:55.067Z",
+    "duration_ms": 0
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-14T08:57:55.067Z",
+      "data": {
+        "sceneDescription": "视觉模型已完成场景识别。",
+        "summary": "真实视觉模型已识别到 3 个具体物体"
+      }
+    }
+  ],
+  "finalized": false
+}

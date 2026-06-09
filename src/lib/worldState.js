@@ -7,6 +7,16 @@ export const emptyWorldState = {
     holdingObjectId: null
   },
   objects: [],
+  execution: {
+    status: "idle",
+    currentStepIndex: 0,
+    currentAction: null,
+    targetObjectId: null,
+    destinationRegion: null,
+    path: [],
+    startedAt: null,
+    completedAt: null
+  },
   lastTask: null,
   lastExecutionResult: null
 };
@@ -118,6 +128,10 @@ export function initializeWorldState(objects = [], robotScenePosition) {
         lastUpdatedAt: now
       };
     }),
+    execution: {
+      ...emptyWorldState.execution,
+      status: "idle"
+    },
     lastTask: null,
     lastExecutionResult: null
   };

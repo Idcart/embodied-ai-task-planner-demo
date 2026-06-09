@@ -48,6 +48,11 @@ export default class SimulationExecutor extends BaseExecutor {
       setActiveStage?.("feedback");
       updateWorldState?.((prev) => ({
         ...prev,
+        execution: {
+          ...(prev.execution || {}),
+          status: "failed",
+          completedAt: Date.now()
+        },
         lastTask: task,
         lastExecutionResult: {
           success: false,
@@ -66,6 +71,11 @@ export default class SimulationExecutor extends BaseExecutor {
       this.addLog("完成", validation.message);
       updateWorldState?.((prev) => ({
         ...prev,
+        execution: {
+          ...(prev.execution || {}),
+          status: "completed",
+          completedAt: Date.now()
+        },
         lastTask: task,
         lastExecutionResult: {
           success: true,
@@ -91,6 +101,11 @@ export default class SimulationExecutor extends BaseExecutor {
       this.addLog("错误", verification.message);
       updateWorldState?.((prev) => ({
         ...prev,
+        execution: {
+          ...(prev.execution || {}),
+          status: "failed",
+          completedAt: Date.now()
+        },
         lastTask: task,
         lastExecutionResult: {
           success: false,
@@ -113,6 +128,11 @@ export default class SimulationExecutor extends BaseExecutor {
     this.addLog("反馈", data.result);
     updateWorldState?.((prev) => ({
       ...prev,
+      execution: {
+        ...(prev.execution || {}),
+        status: data.success ? "completed" : "failed",
+        completedAt: Date.now()
+      },
       lastTask: task,
       lastExecutionResult: {
         success: Boolean(data.success),

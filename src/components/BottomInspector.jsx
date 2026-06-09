@@ -3,11 +3,13 @@ import LogPanel from "./LogPanel";
 import PerceptionPanel from "./PerceptionPanel";
 import PlanPanel from "./PlanPanel";
 import WorldStatePanel from "./WorldStatePanel";
+import EpisodePanel from "./EpisodePanel";
 
 const tabs = [
   { id: "plan", label: "AI 规划步骤" },
   { id: "objects", label: "识别物体列表" },
   { id: "worldState", label: "World State" },
+  { id: "episodes", label: "Episode 数据" },
   { id: "logs", label: "执行日志" }
 ];
 
@@ -23,7 +25,12 @@ export default function BottomInspector({
   sceneDescription,
   imagePreview,
   logs,
-  result
+  result,
+  episodes,
+  currentEpisode,
+  selectedEpisode,
+  onRefreshEpisodes,
+  onSelectEpisode
 }) {
   const [activeTab, setActiveTab] = useState("plan");
 
@@ -64,6 +71,15 @@ export default function BottomInspector({
           />
         ) : null}
         {activeTab === "worldState" ? <WorldStatePanel worldState={worldState} objectCount={objects.length} /> : null}
+        {activeTab === "episodes" ? (
+          <EpisodePanel
+            episodes={episodes}
+            currentEpisode={currentEpisode}
+            selectedEpisode={selectedEpisode}
+            onRefresh={onRefreshEpisodes}
+            onSelectEpisode={onSelectEpisode}
+          />
+        ) : null}
         {activeTab === "logs" ? <LogPanel logs={logs} result={result} /> : null}
       </div>
     </section>

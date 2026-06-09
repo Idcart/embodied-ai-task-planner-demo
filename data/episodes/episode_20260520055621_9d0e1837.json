@@ -1,0 +1,1255 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260520055621_9d0e1837",
+  "created_at": "2026-05-20T05:56:21.828Z",
+  "updated_at": "2026-05-20T05:56:21.828Z",
+  "user_task_instruction": "把玩具移动到杯子旁边",
+  "uploaded_image_path": "data/uploads/upload_1779256509126_9469d50c.webp",
+  "multimodal_perception_result": {
+    "success": true,
+    "sceneId": "uploaded_1779256557078",
+    "mode": "uploaded-image",
+    "model": "mimo-v2.5",
+    "uploadedImagePath": "data/uploads/upload_1779256509126_9469d50c.webp",
+    "sceneDescription": "一个明亮的儿童房间，配有蓝色墙壁，有床、衣柜、书桌、书架和各种玩具。",
+    "objects": [
+      {
+        "id": "object_1",
+        "name": "熊猫玩偶",
+        "type": "toy",
+        "icon": "toy",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 70,
+          "yPercent": 50
+        },
+        "confidence": 0.9,
+        "operable": true,
+        "description": "一个黑白熊猫造型的毛绒玩具",
+        "affordance": [
+          "pickable",
+          "movable"
+        ],
+        "risk": "柔软，易变形",
+        "status": "detected",
+        "scenePosition": {
+          "x": 420,
+          "y": 200
+        },
+        "bbox": {
+          "x": 63,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_2",
+        "name": "足球",
+        "type": "ball",
+        "icon": "ball",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_center",
+          "xPercent": 40,
+          "yPercent": 90
+        },
+        "confidence": 0.95,
+        "operable": true,
+        "description": "一个黑白相间的足球",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "滚动，可能不稳定",
+        "status": "detected",
+        "scenePosition": {
+          "x": 240,
+          "y": 360
+        },
+        "bbox": {
+          "x": 33,
+          "y": 82,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_3",
+        "name": "枕头",
+        "type": "pillow",
+        "icon": "pillow",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_left",
+          "xPercent": 20,
+          "yPercent": 45
+        },
+        "confidence": 0.85,
+        "operable": true,
+        "description": "一个带有图案的枕头",
+        "affordance": [
+          "pickable",
+          "movable"
+        ],
+        "risk": "柔软，体积较大",
+        "status": "detected",
+        "scenePosition": {
+          "x": 120,
+          "y": 180
+        },
+        "bbox": {
+          "x": 13,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_4",
+        "name": "椅子",
+        "type": "chair",
+        "icon": "chair",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_right",
+          "xPercent": 75,
+          "yPercent": 65
+        },
+        "confidence": 0.9,
+        "operable": true,
+        "description": "一个带轮子的绿色椅子",
+        "affordance": [
+          "movable",
+          "placeable"
+        ],
+        "risk": "有轮子，可能滑动",
+        "status": "detected",
+        "scenePosition": {
+          "x": 450,
+          "y": 260
+        },
+        "bbox": {
+          "x": 68,
+          "y": 58,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_5",
+        "name": "笔筒",
+        "type": "container",
+        "icon": "container",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 85,
+          "yPercent": 55
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "一个用于放笔的容器",
+        "affordance": [
+          "pickable",
+          "container"
+        ],
+        "risk": "可能装有笔，易倾倒",
+        "status": "detected",
+        "scenePosition": {
+          "x": 510,
+          "y": 220
+        },
+        "bbox": {
+          "x": 78,
+          "y": 48,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_6",
+        "name": "书",
+        "type": "book",
+        "icon": "book",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 80,
+          "yPercent": 55
+        },
+        "confidence": 0.7,
+        "operable": true,
+        "description": "一本打开的书",
+        "affordance": [
+          "pickable",
+          "placeable"
+        ],
+        "risk": "纸张，易撕破",
+        "status": "detected",
+        "scenePosition": {
+          "x": 480,
+          "y": 220
+        },
+        "bbox": {
+          "x": 69,
+          "y": 48.5,
+          "width": 22,
+          "height": 13
+        }
+      },
+      {
+        "id": "object_7",
+        "name": "玩具",
+        "type": "toy",
+        "icon": "toy",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_left",
+          "xPercent": 10,
+          "yPercent": 70
+        },
+        "confidence": 0.8,
+        "operable": true,
+        "description": "一个毛绒玩具或小玩偶",
+        "affordance": [
+          "pickable",
+          "movable"
+        ],
+        "risk": "小型，可能易碎",
+        "status": "detected",
+        "scenePosition": {
+          "x": 60,
+          "y": 280
+        },
+        "bbox": {
+          "x": 3,
+          "y": 63,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_8",
+        "name": "杯子",
+        "type": "cup",
+        "icon": "cup",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 88,
+          "yPercent": 50
+        },
+        "confidence": 0.75,
+        "operable": true,
+        "description": "一个可能装有液体的杯子",
+        "affordance": [
+          "pickable",
+          "container"
+        ],
+        "risk": "易碎，装有液体可能溢出",
+        "status": "detected",
+        "scenePosition": {
+          "x": 528,
+          "y": 200
+        },
+        "bbox": {
+          "x": 81,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "object_1",
+        "label": "熊猫玩偶",
+        "bbox": {
+          "x": 63,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      },
+      {
+        "id": "object_2",
+        "label": "足球",
+        "bbox": {
+          "x": 33,
+          "y": 82,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.95
+      },
+      {
+        "id": "object_3",
+        "label": "枕头",
+        "bbox": {
+          "x": 13,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.85
+      },
+      {
+        "id": "object_4",
+        "label": "椅子",
+        "bbox": {
+          "x": 68,
+          "y": 58,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      },
+      {
+        "id": "object_5",
+        "label": "笔筒",
+        "bbox": {
+          "x": 78,
+          "y": 48,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_6",
+        "label": "书",
+        "bbox": {
+          "x": 69,
+          "y": 48.5,
+          "width": 22,
+          "height": 13
+        },
+        "confidence": 0.7
+      },
+      {
+        "id": "object_7",
+        "label": "玩具",
+        "bbox": {
+          "x": 3,
+          "y": 63,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.8
+      },
+      {
+        "id": "object_8",
+        "label": "杯子",
+        "bbox": {
+          "x": 81,
+          "y": 43,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.75
+      }
+    ],
+    "summary": "真实视觉模型已识别到 8 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "object_1",
+      "name": "熊猫玩偶",
+      "type": "toy",
+      "icon": "toy",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "center_right",
+        "xPercent": 70,
+        "yPercent": 50,
+        "x": 420,
+        "y": 200
+      },
+      "confidence": 0.9,
+      "operable": true,
+      "description": "一个黑白熊猫造型的毛绒玩具",
+      "affordance": [
+        "pickable",
+        "movable"
+      ],
+      "risk": "柔软，易变形",
+      "status": "detected",
+      "scenePosition": {
+        "x": 420,
+        "y": 200
+      },
+      "bbox": {
+        "x": 63,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 63,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "center_right",
+        "xPercent": 70,
+        "yPercent": 50,
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "id": "object_2",
+      "name": "足球",
+      "type": "ball",
+      "icon": "ball",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "bottom_center",
+        "xPercent": 40,
+        "yPercent": 90,
+        "x": 240,
+        "y": 360
+      },
+      "confidence": 0.95,
+      "operable": true,
+      "description": "一个黑白相间的足球",
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "滚动，可能不稳定",
+      "status": "detected",
+      "scenePosition": {
+        "x": 240,
+        "y": 360
+      },
+      "bbox": {
+        "x": 33,
+        "y": 82,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 33,
+        "y": 82,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "bottom_center",
+        "xPercent": 40,
+        "yPercent": 90,
+        "x": 240,
+        "y": 360
+      }
+    },
+    {
+      "id": "object_3",
+      "name": "枕头",
+      "type": "pillow",
+      "icon": "pillow",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "center_left",
+        "xPercent": 20,
+        "yPercent": 45,
+        "x": 120,
+        "y": 180
+      },
+      "confidence": 0.85,
+      "operable": true,
+      "description": "一个带有图案的枕头",
+      "affordance": [
+        "pickable",
+        "movable"
+      ],
+      "risk": "柔软，体积较大",
+      "status": "detected",
+      "scenePosition": {
+        "x": 120,
+        "y": 180
+      },
+      "bbox": {
+        "x": 13,
+        "y": 38,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 13,
+        "y": 38,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "center_left",
+        "xPercent": 20,
+        "yPercent": 45,
+        "x": 120,
+        "y": 180
+      }
+    },
+    {
+      "id": "object_4",
+      "name": "椅子",
+      "type": "chair",
+      "icon": "chair",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "bottom_right",
+        "xPercent": 75,
+        "yPercent": 65,
+        "x": 450,
+        "y": 260
+      },
+      "confidence": 0.9,
+      "operable": true,
+      "description": "一个带轮子的绿色椅子",
+      "affordance": [
+        "movable",
+        "placeable"
+      ],
+      "risk": "有轮子，可能滑动",
+      "status": "detected",
+      "scenePosition": {
+        "x": 450,
+        "y": 260
+      },
+      "bbox": {
+        "x": 68,
+        "y": 58,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 68,
+        "y": 58,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "bottom_right",
+        "xPercent": 75,
+        "yPercent": 65,
+        "x": 450,
+        "y": 260
+      }
+    },
+    {
+      "id": "object_5",
+      "name": "笔筒",
+      "type": "container",
+      "icon": "container",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "center_right",
+        "xPercent": 85,
+        "yPercent": 55,
+        "x": 510,
+        "y": 220
+      },
+      "confidence": 0.8,
+      "operable": true,
+      "description": "一个用于放笔的容器",
+      "affordance": [
+        "pickable",
+        "container"
+      ],
+      "risk": "可能装有笔，易倾倒",
+      "status": "detected",
+      "scenePosition": {
+        "x": 510,
+        "y": 220
+      },
+      "bbox": {
+        "x": 78,
+        "y": 48,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 78,
+        "y": 48,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "center_right",
+        "xPercent": 85,
+        "yPercent": 55,
+        "x": 510,
+        "y": 220
+      }
+    },
+    {
+      "id": "object_6",
+      "name": "书",
+      "type": "book",
+      "icon": "book",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "center_right",
+        "xPercent": 80,
+        "yPercent": 55,
+        "x": 480,
+        "y": 220
+      },
+      "confidence": 0.7,
+      "operable": true,
+      "description": "一本打开的书",
+      "affordance": [
+        "pickable",
+        "placeable"
+      ],
+      "risk": "纸张，易撕破",
+      "status": "detected",
+      "scenePosition": {
+        "x": 480,
+        "y": 220
+      },
+      "bbox": {
+        "x": 69,
+        "y": 48.5,
+        "width": 22,
+        "height": 13
+      },
+      "bbox_2d": {
+        "x": 69,
+        "y": 48.5,
+        "width": 22,
+        "height": 13
+      },
+      "position_3d": {
+        "region": "center_right",
+        "xPercent": 80,
+        "yPercent": 55,
+        "x": 480,
+        "y": 220
+      }
+    },
+    {
+      "id": "object_7",
+      "name": "玩具",
+      "type": "toy",
+      "icon": "toy",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "bottom_left",
+        "xPercent": 10,
+        "yPercent": 70,
+        "x": 60,
+        "y": 280
+      },
+      "confidence": 0.8,
+      "operable": true,
+      "description": "一个毛绒玩具或小玩偶",
+      "affordance": [
+        "pickable",
+        "movable"
+      ],
+      "risk": "小型，可能易碎",
+      "status": "detected",
+      "scenePosition": {
+        "x": 60,
+        "y": 280
+      },
+      "bbox": {
+        "x": 3,
+        "y": 63,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 3,
+        "y": 63,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "bottom_left",
+        "xPercent": 10,
+        "yPercent": 70,
+        "x": 60,
+        "y": 280
+      }
+    },
+    {
+      "id": "object_8",
+      "name": "杯子",
+      "type": "cup",
+      "icon": "cup",
+      "color": "#0ea5a3",
+      "position": {
+        "region": "center_right",
+        "xPercent": 88,
+        "yPercent": 50,
+        "x": 528,
+        "y": 200
+      },
+      "confidence": 0.75,
+      "operable": true,
+      "description": "一个可能装有液体的杯子",
+      "affordance": [
+        "pickable",
+        "container"
+      ],
+      "risk": "易碎，装有液体可能溢出",
+      "status": "detected",
+      "scenePosition": {
+        "x": 528,
+        "y": 200
+      },
+      "bbox": {
+        "x": 81,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "bbox_2d": {
+        "x": 81,
+        "y": 43,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "region": "center_right",
+        "xPercent": 88,
+        "yPercent": 50,
+        "x": 528,
+        "y": 200
+      }
+    }
+  ],
+  "target_position": {
+    "x": 528,
+    "y": 200
+  },
+  "task_plan_steps": [
+    {
+      "step": 1,
+      "action": "observe_scene",
+      "target": "桌面",
+      "description": "读取感知结果并构建桌面语义场景",
+      "status": "waiting"
+    },
+    {
+      "step": 2,
+      "action": "locate_target_object",
+      "target": "玩具",
+      "description": "定位需要移动的目标物体：玩具",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 3,
+      "action": "check_operability",
+      "target": "玩具",
+      "description": "检查玩具是否可操作：可操作",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      },
+      "risk": "柔软，易变形",
+      "affordance": [
+        "pickable",
+        "movable"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "check_target_area",
+      "target": "杯子旁边",
+      "description": "检查目标区域：杯子旁边",
+      "status": "waiting",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 5,
+      "action": "move_to_object",
+      "target": "玩具",
+      "description": "移动机器人到玩具附近",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 6,
+      "action": "pick_object",
+      "target": "玩具",
+      "description": "抓取玩具",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 7,
+      "action": "move_with_object_to_destination",
+      "target": "杯子旁边",
+      "description": "携带玩具移动到杯子旁边",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 8,
+      "action": "place_object",
+      "target": "杯子旁边",
+      "description": "将玩具放到杯子旁边",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 9,
+      "action": "verify_result",
+      "target": "任务结果",
+      "description": "验证目标物体是否已到达目标区域",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 10,
+      "action": "done",
+      "target": "任务完成",
+      "description": "确认目标状态并结束执行",
+      "status": "waiting",
+      "objectId": "object_1"
+    }
+  ],
+  "simulation_action_steps": [
+    {
+      "step": 1,
+      "action": "observe_scene",
+      "target": "桌面",
+      "description": "读取感知结果并构建桌面语义场景",
+      "status": "waiting"
+    },
+    {
+      "step": 2,
+      "action": "locate_target_object",
+      "target": "玩具",
+      "description": "定位需要移动的目标物体：玩具",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 3,
+      "action": "check_operability",
+      "target": "玩具",
+      "description": "检查玩具是否可操作：可操作",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      },
+      "risk": "柔软，易变形",
+      "affordance": [
+        "pickable",
+        "movable"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "check_target_area",
+      "target": "杯子旁边",
+      "description": "检查目标区域：杯子旁边",
+      "status": "waiting",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 5,
+      "action": "move_to_object",
+      "target": "玩具",
+      "description": "移动机器人到玩具附近",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 6,
+      "action": "pick_object",
+      "target": "玩具",
+      "description": "抓取玩具",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 420,
+        "y": 200
+      }
+    },
+    {
+      "step": 7,
+      "action": "move_with_object_to_destination",
+      "target": "杯子旁边",
+      "description": "携带玩具移动到杯子旁边",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 8,
+      "action": "place_object",
+      "target": "杯子旁边",
+      "description": "将玩具放到杯子旁边",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 9,
+      "action": "verify_result",
+      "target": "任务结果",
+      "description": "验证目标物体是否已到达目标区域",
+      "status": "waiting",
+      "objectId": "object_1",
+      "position": {
+        "x": 528,
+        "y": 200
+      },
+      "targetPosition": {
+        "x": 528,
+        "y": 200
+      },
+      "targetArea": "杯子旁边"
+    },
+    {
+      "step": 10,
+      "action": "done",
+      "target": "任务完成",
+      "description": "确认目标状态并结束执行",
+      "status": "waiting",
+      "objectId": "object_1"
+    }
+  ],
+  "execution_result": {
+    "success": true,
+    "status": "already_completed",
+    "message": "熊猫玩偶已经位于杯子旁边，无需重复执行。",
+    "worldState": {
+      "robot": {
+        "position": {
+          "x": -3.55,
+          "y": 0.35,
+          "z": -2.45
+        },
+        "holdingObjectId": null
+      },
+      "objects": [
+        {
+          "id": "object_1",
+          "name": "熊猫玩偶",
+          "type": "toy",
+          "position": {
+            "x": 2,
+            "y": 0.34,
+            "z": 0
+          },
+          "originalPosition": {
+            "x": 2,
+            "y": 0.34,
+            "z": 0
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_2",
+          "name": "足球",
+          "type": "ball",
+          "position": {
+            "x": -1,
+            "y": 0.34,
+            "z": 4
+          },
+          "originalPosition": {
+            "x": -1,
+            "y": 0.34,
+            "z": 4
+          },
+          "currentRegion": "bottom_center",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_3",
+          "name": "枕头",
+          "type": "pillow",
+          "position": {
+            "x": -3,
+            "y": 0.34,
+            "z": -0.5
+          },
+          "originalPosition": {
+            "x": -3,
+            "y": 0.34,
+            "z": -0.5
+          },
+          "currentRegion": "center_left",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_4",
+          "name": "椅子",
+          "type": "chair",
+          "position": {
+            "x": 2.5,
+            "y": 0.34,
+            "z": 1.5
+          },
+          "originalPosition": {
+            "x": 2.5,
+            "y": 0.34,
+            "z": 1.5
+          },
+          "currentRegion": "bottom_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_5",
+          "name": "笔筒",
+          "type": "container",
+          "position": {
+            "x": 3.5,
+            "y": 0.34,
+            "z": 0.5
+          },
+          "originalPosition": {
+            "x": 3.5,
+            "y": 0.34,
+            "z": 0.5
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_6",
+          "name": "书",
+          "type": "book",
+          "position": {
+            "x": 3,
+            "y": 0.34,
+            "z": 0.5
+          },
+          "originalPosition": {
+            "x": 3,
+            "y": 0.34,
+            "z": 0.5
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_7",
+          "name": "玩具",
+          "type": "toy",
+          "position": {
+            "x": -4,
+            "y": 0.34,
+            "z": 2
+          },
+          "originalPosition": {
+            "x": -4,
+            "y": 0.34,
+            "z": 2
+          },
+          "currentRegion": "bottom_left",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        },
+        {
+          "id": "object_8",
+          "name": "杯子",
+          "type": "cup",
+          "position": {
+            "x": 3.8,
+            "y": 0.34,
+            "z": 0
+          },
+          "originalPosition": {
+            "x": 3.8,
+            "y": 0.34,
+            "z": 0
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256557084
+        }
+      ],
+      "execution": {
+        "status": "completed",
+        "currentStepIndex": 0,
+        "currentAction": null,
+        "targetObjectId": "object_1",
+        "destinationRegion": "center_right",
+        "path": [
+          {
+            "x": 55,
+            "y": 70
+          },
+          {
+            "x": 396,
+            "y": 174
+          },
+          {
+            "x": 504,
+            "y": 174
+          }
+        ],
+        "startedAt": 1779256581795,
+        "completedAt": 1779256581796
+      },
+      "lastTask": "把玩具移动到杯子旁边",
+      "lastExecutionResult": {
+        "success": true,
+        "status": "already_completed",
+        "message": "熊猫玩偶已经位于杯子旁边，无需重复执行。",
+        "finishedAt": 1779256581796
+      }
+    }
+  },
+  "success": true,
+  "failure_reason": null,
+  "finalized": true,
+  "data_quality": {
+    "sample_quality_score": 0.82,
+    "image_quality_score": 0.75,
+    "object_detection_quality_score": 0.8,
+    "spatial_mapping_quality_score": 0.82,
+    "task_plan_quality_score": 0.84,
+    "execution_quality_score": 0.9,
+    "known_issues": [],
+    "is_training_ready": true
+  },
+  "failure_sample": {
+    "is_failure_sample": false,
+    "failure_type": null,
+    "failure_reason": null,
+    "recoverable": null,
+    "recommended_fix": null
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260520055621_9d0e1837",
+    "task_description": "把玩具移动到杯子旁边",
+    "scene_type": "desktop",
+    "object_count": 8,
+    "main_objects": [
+      "熊猫玩偶",
+      "足球",
+      "枕头",
+      "椅子",
+      "笔筒",
+      "书",
+      "玩具",
+      "杯子"
+    ],
+    "success": true,
+    "failure_type": null,
+    "quality_score": 0.82,
+    "is_training_ready": true,
+    "created_at": "2026-05-20T05:56:21.828Z"
+  }
+}

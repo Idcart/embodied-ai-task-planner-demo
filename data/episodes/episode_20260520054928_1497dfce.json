@@ -1,0 +1,1050 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260520054928_1497dfce",
+  "created_at": "2026-05-20T05:49:28.186Z",
+  "updated_at": "2026-05-20T05:49:28.186Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": null,
+  "multimodal_perception_result": {
+    "success": true,
+    "sceneId": "desktop_scene_mock_001",
+    "mode": "built-in-scene",
+    "model": "mock-detector-v2",
+    "sceneDescription": "内置桌面仿真场景，桌面上有杯子、书、苹果、篮子、纸团和笔。",
+    "objects": [
+      {
+        "id": "cup_1",
+        "name": "杯子",
+        "type": "cup",
+        "icon": "cup",
+        "color": "#14b8a6",
+        "position": {
+          "x": 130,
+          "y": 190,
+          "xPercent": 21.67,
+          "yPercent": 47.5
+        },
+        "bbox": {
+          "x": 14.67,
+          "y": 40.5,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.94,
+        "status": "detected",
+        "operable": true,
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+        "description": "杯子位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 130,
+          "y": 190
+        }
+      },
+      {
+        "id": "book_1",
+        "name": "书",
+        "type": "book",
+        "icon": "book",
+        "color": "#7c3aed",
+        "position": {
+          "x": 330,
+          "y": 120,
+          "xPercent": 55,
+          "yPercent": 30
+        },
+        "bbox": {
+          "x": 44,
+          "y": 23.5,
+          "width": 22,
+          "height": 13
+        },
+        "confidence": 0.91,
+        "status": "detected",
+        "operable": true,
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "description": "书位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 330,
+          "y": 120
+        }
+      },
+      {
+        "id": "apple_1",
+        "name": "苹果",
+        "type": "apple",
+        "icon": "apple",
+        "color": "#ef4444",
+        "position": {
+          "x": 220,
+          "y": 285,
+          "xPercent": 36.67,
+          "yPercent": 71.25
+        },
+        "bbox": {
+          "x": 29.67,
+          "y": 64.25,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.88,
+        "status": "detected",
+        "operable": true,
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "球形物体易滚动，放置后需要验证稳定性。",
+        "description": "苹果位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 220,
+          "y": 285
+        }
+      },
+      {
+        "id": "basket_1",
+        "name": "篮子",
+        "type": "basket",
+        "icon": "basket",
+        "color": "#f59e0b",
+        "position": {
+          "x": 455,
+          "y": 275,
+          "xPercent": 75.83,
+          "yPercent": 68.75
+        },
+        "bbox": {
+          "x": 68.83,
+          "y": 61.75,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9,
+        "status": "detected",
+        "operable": false,
+        "affordance": [
+          "observable"
+        ],
+        "risk": "可作为目标容器，不建议作为被抓取目标。",
+        "description": "篮子位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 455,
+          "y": 275
+        }
+      },
+      {
+        "id": "paper_1",
+        "name": "纸团",
+        "type": "trash",
+        "icon": "trash",
+        "color": "#64748b",
+        "position": {
+          "x": 505,
+          "y": 155,
+          "xPercent": 84.17,
+          "yPercent": 38.75
+        },
+        "bbox": {
+          "x": 77.17,
+          "y": 31.75,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.82,
+        "status": "detected",
+        "operable": true,
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "description": "纸团位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 505,
+          "y": 155
+        }
+      },
+      {
+        "id": "pen_1",
+        "name": "笔",
+        "type": "pen",
+        "icon": "pen",
+        "color": "#2563eb",
+        "position": {
+          "x": 88,
+          "y": 320,
+          "xPercent": 14.67,
+          "yPercent": 80
+        },
+        "bbox": {
+          "x": 5.67,
+          "y": 76,
+          "width": 18,
+          "height": 8
+        },
+        "confidence": 0.86,
+        "status": "detected",
+        "operable": true,
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "低风险，仍需避开周围障碍物。",
+        "description": "笔位于桌面区域，可用于任务规划。",
+        "scenePosition": {
+          "x": 88,
+          "y": 320
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "cup_1",
+        "label": "杯子",
+        "bbox": {
+          "x": 14.67,
+          "y": 40.5,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.94
+      },
+      {
+        "id": "book_1",
+        "label": "书",
+        "bbox": {
+          "x": 44,
+          "y": 23.5,
+          "width": 22,
+          "height": 13
+        },
+        "confidence": 0.91
+      },
+      {
+        "id": "apple_1",
+        "label": "苹果",
+        "bbox": {
+          "x": 29.67,
+          "y": 64.25,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.88
+      },
+      {
+        "id": "basket_1",
+        "label": "篮子",
+        "bbox": {
+          "x": 68.83,
+          "y": 61.75,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      },
+      {
+        "id": "paper_1",
+        "label": "纸团",
+        "bbox": {
+          "x": 77.17,
+          "y": 31.75,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.82
+      },
+      {
+        "id": "pen_1",
+        "label": "笔",
+        "bbox": {
+          "x": 5.67,
+          "y": 76,
+          "width": 18,
+          "height": 8
+        },
+        "confidence": 0.86
+      }
+    ],
+    "summary": "已识别到 6 个桌面物体，包含坐标、置信度和模拟识别框"
+  },
+  "objects": [
+    {
+      "id": "cup_1",
+      "name": "杯子",
+      "type": "cup",
+      "icon": "cup",
+      "color": "#14b8a6",
+      "position": {
+        "x": 130,
+        "y": 190,
+        "xPercent": 21.67,
+        "yPercent": 47.5,
+        "region": "center_left"
+      },
+      "bbox": {
+        "x": 14.67,
+        "y": 40.5,
+        "width": 14,
+        "height": 14
+      },
+      "confidence": 0.94,
+      "status": "detected",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+      "description": "杯子位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 130,
+        "y": 190
+      },
+      "bbox_2d": {
+        "x": 14.67,
+        "y": 40.5,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "x": 130,
+        "y": 190,
+        "xPercent": 21.67,
+        "yPercent": 47.5,
+        "region": "center_left"
+      }
+    },
+    {
+      "id": "book_1",
+      "name": "书",
+      "type": "book",
+      "icon": "book",
+      "color": "#7c3aed",
+      "position": {
+        "x": 330,
+        "y": 120,
+        "xPercent": 55,
+        "yPercent": 30,
+        "region": "top_center"
+      },
+      "bbox": {
+        "x": 44,
+        "y": 23.5,
+        "width": 22,
+        "height": 13
+      },
+      "confidence": 0.91,
+      "status": "detected",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "description": "书位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 330,
+        "y": 120
+      },
+      "bbox_2d": {
+        "x": 44,
+        "y": 23.5,
+        "width": 22,
+        "height": 13
+      },
+      "position_3d": {
+        "x": 330,
+        "y": 120,
+        "xPercent": 55,
+        "yPercent": 30,
+        "region": "top_center"
+      }
+    },
+    {
+      "id": "apple_1",
+      "name": "苹果",
+      "type": "apple",
+      "icon": "apple",
+      "color": "#ef4444",
+      "position": {
+        "x": 220,
+        "y": 285,
+        "xPercent": 36.67,
+        "yPercent": 71.25,
+        "region": "bottom_center"
+      },
+      "bbox": {
+        "x": 29.67,
+        "y": 64.25,
+        "width": 14,
+        "height": 14
+      },
+      "confidence": 0.88,
+      "status": "detected",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "球形物体易滚动，放置后需要验证稳定性。",
+      "description": "苹果位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 220,
+        "y": 285
+      },
+      "bbox_2d": {
+        "x": 29.67,
+        "y": 64.25,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "x": 220,
+        "y": 285,
+        "xPercent": 36.67,
+        "yPercent": 71.25,
+        "region": "bottom_center"
+      }
+    },
+    {
+      "id": "basket_1",
+      "name": "篮子",
+      "type": "basket",
+      "icon": "basket",
+      "color": "#f59e0b",
+      "position": {
+        "x": 455,
+        "y": 275,
+        "xPercent": 75.83,
+        "yPercent": 68.75,
+        "region": "bottom_right"
+      },
+      "bbox": {
+        "x": 68.83,
+        "y": 61.75,
+        "width": 14,
+        "height": 14
+      },
+      "confidence": 0.9,
+      "status": "detected",
+      "operable": false,
+      "affordance": [
+        "observable"
+      ],
+      "risk": "可作为目标容器，不建议作为被抓取目标。",
+      "description": "篮子位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 455,
+        "y": 275
+      },
+      "bbox_2d": {
+        "x": 68.83,
+        "y": 61.75,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "x": 455,
+        "y": 275,
+        "xPercent": 75.83,
+        "yPercent": 68.75,
+        "region": "bottom_right"
+      }
+    },
+    {
+      "id": "paper_1",
+      "name": "纸团",
+      "type": "trash",
+      "icon": "trash",
+      "color": "#64748b",
+      "position": {
+        "x": 505,
+        "y": 155,
+        "xPercent": 84.17,
+        "yPercent": 38.75,
+        "region": "center_right"
+      },
+      "bbox": {
+        "x": 77.17,
+        "y": 31.75,
+        "width": 14,
+        "height": 14
+      },
+      "confidence": 0.82,
+      "status": "detected",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "description": "纸团位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 505,
+        "y": 155
+      },
+      "bbox_2d": {
+        "x": 77.17,
+        "y": 31.75,
+        "width": 14,
+        "height": 14
+      },
+      "position_3d": {
+        "x": 505,
+        "y": 155,
+        "xPercent": 84.17,
+        "yPercent": 38.75,
+        "region": "center_right"
+      }
+    },
+    {
+      "id": "pen_1",
+      "name": "笔",
+      "type": "pen",
+      "icon": "pen",
+      "color": "#2563eb",
+      "position": {
+        "x": 88,
+        "y": 320,
+        "xPercent": 14.67,
+        "yPercent": 80,
+        "region": "bottom_left"
+      },
+      "bbox": {
+        "x": 5.67,
+        "y": 76,
+        "width": 18,
+        "height": 8
+      },
+      "confidence": 0.86,
+      "status": "detected",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "低风险，仍需避开周围障碍物。",
+      "description": "笔位于桌面区域，可用于任务规划。",
+      "scenePosition": {
+        "x": 88,
+        "y": 320
+      },
+      "bbox_2d": {
+        "x": 5.67,
+        "y": 76,
+        "width": 18,
+        "height": 8
+      },
+      "position_3d": {
+        "x": 88,
+        "y": 320,
+        "xPercent": 14.67,
+        "yPercent": 80,
+        "region": "bottom_left"
+      }
+    }
+  ],
+  "target_position": {
+    "x": 500,
+    "y": 70
+  },
+  "task_plan_steps": [
+    {
+      "step": 1,
+      "action": "observe_scene",
+      "target": "桌面",
+      "description": "读取感知结果并构建桌面语义场景",
+      "status": "waiting"
+    },
+    {
+      "step": 2,
+      "action": "locate_target_object",
+      "target": "杯子",
+      "description": "定位需要移动的目标物体：杯子",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 3,
+      "action": "check_operability",
+      "target": "杯子",
+      "description": "检查杯子是否可操作：可操作",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      },
+      "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "check_target_area",
+      "target": "桌子右上角",
+      "description": "检查目标区域：桌子右上角",
+      "status": "waiting",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 5,
+      "action": "move_to_object",
+      "target": "杯子",
+      "description": "移动机器人到杯子附近",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 6,
+      "action": "pick_object",
+      "target": "杯子",
+      "description": "抓取杯子",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 7,
+      "action": "move_with_object_to_destination",
+      "target": "桌子右上角",
+      "description": "携带杯子移动到桌子右上角",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 8,
+      "action": "place_object",
+      "target": "桌子右上角",
+      "description": "将杯子放到桌子右上角",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 9,
+      "action": "verify_result",
+      "target": "任务结果",
+      "description": "验证目标物体是否已到达目标区域",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 10,
+      "action": "done",
+      "target": "任务完成",
+      "description": "确认目标状态并结束执行",
+      "status": "waiting",
+      "objectId": "cup_1"
+    }
+  ],
+  "simulation_action_steps": [
+    {
+      "step": 1,
+      "action": "observe_scene",
+      "target": "桌面",
+      "description": "读取感知结果并构建桌面语义场景",
+      "status": "waiting"
+    },
+    {
+      "step": 2,
+      "action": "locate_target_object",
+      "target": "杯子",
+      "description": "定位需要移动的目标物体：杯子",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 3,
+      "action": "check_operability",
+      "target": "杯子",
+      "description": "检查杯子是否可操作：可操作",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      },
+      "risk": "可能倾倒或含液体，抓取前需要保持低速。",
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "check_target_area",
+      "target": "桌子右上角",
+      "description": "检查目标区域：桌子右上角",
+      "status": "waiting",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 5,
+      "action": "move_to_object",
+      "target": "杯子",
+      "description": "移动机器人到杯子附近",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 6,
+      "action": "pick_object",
+      "target": "杯子",
+      "description": "抓取杯子",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 130,
+        "y": 190
+      }
+    },
+    {
+      "step": 7,
+      "action": "move_with_object_to_destination",
+      "target": "桌子右上角",
+      "description": "携带杯子移动到桌子右上角",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 8,
+      "action": "place_object",
+      "target": "桌子右上角",
+      "description": "将杯子放到桌子右上角",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 9,
+      "action": "verify_result",
+      "target": "任务结果",
+      "description": "验证目标物体是否已到达目标区域",
+      "status": "waiting",
+      "objectId": "cup_1",
+      "position": {
+        "x": 500,
+        "y": 70
+      },
+      "targetPosition": {
+        "x": 500,
+        "y": 70
+      },
+      "targetArea": "桌子右上角"
+    },
+    {
+      "step": 10,
+      "action": "done",
+      "target": "任务完成",
+      "description": "确认目标状态并结束执行",
+      "status": "waiting",
+      "objectId": "cup_1"
+    }
+  ],
+  "execution_result": {
+    "success": true,
+    "status": "completed",
+    "message": "机器人已完成把杯子移动到桌子右上角",
+    "worldState": {
+      "robot": {
+        "position": {
+          "x": 3.4666666666666672,
+          "y": 0.35,
+          "z": -3.1
+        },
+        "holdingObjectId": null
+      },
+      "objects": [
+        {
+          "id": "cup_1",
+          "name": "杯子",
+          "type": "cup",
+          "position": {
+            "x": 3.3333333333333344,
+            "y": 0.34,
+            "z": -3.25
+          },
+          "originalPosition": {
+            "x": -2.8329999999999997,
+            "y": 0.34,
+            "z": -0.25
+          },
+          "currentRegion": "top_right",
+          "targetRegion": "top_right",
+          "isHeld": false,
+          "isPlaced": true,
+          "lastUpdatedAt": 1779256165594
+        },
+        {
+          "id": "book_1",
+          "name": "书",
+          "type": "book",
+          "position": {
+            "x": 0.5,
+            "y": 0.34,
+            "z": -2
+          },
+          "originalPosition": {
+            "x": 0.5,
+            "y": 0.34,
+            "z": -2
+          },
+          "currentRegion": "top_center",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256151714
+        },
+        {
+          "id": "apple_1",
+          "name": "苹果",
+          "type": "apple",
+          "position": {
+            "x": -1.3329999999999997,
+            "y": 0.34,
+            "z": 2.125
+          },
+          "originalPosition": {
+            "x": -1.3329999999999997,
+            "y": 0.34,
+            "z": 2.125
+          },
+          "currentRegion": "bottom_center",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256151714
+        },
+        {
+          "id": "basket_1",
+          "name": "篮子",
+          "type": "basket",
+          "position": {
+            "x": 2.5829999999999997,
+            "y": 0.34,
+            "z": 1.875
+          },
+          "originalPosition": {
+            "x": 2.5829999999999997,
+            "y": 0.34,
+            "z": 1.875
+          },
+          "currentRegion": "bottom_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256151714
+        },
+        {
+          "id": "paper_1",
+          "name": "纸团",
+          "type": "trash",
+          "position": {
+            "x": 3.4170000000000003,
+            "y": 0.34,
+            "z": -1.125
+          },
+          "originalPosition": {
+            "x": 3.4170000000000003,
+            "y": 0.34,
+            "z": -1.125
+          },
+          "currentRegion": "center_right",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256151714
+        },
+        {
+          "id": "pen_1",
+          "name": "笔",
+          "type": "pen",
+          "position": {
+            "x": -3.533,
+            "y": 0.34,
+            "z": 3
+          },
+          "originalPosition": {
+            "x": -3.533,
+            "y": 0.34,
+            "z": 3
+          },
+          "currentRegion": "bottom_left",
+          "targetRegion": null,
+          "isHeld": false,
+          "isPlaced": false,
+          "lastUpdatedAt": 1779256151714
+        }
+      ],
+      "execution": {
+        "status": "completed",
+        "currentStepIndex": 10,
+        "currentAction": "done",
+        "targetObjectId": "cup_1",
+        "destinationRegion": "top_right",
+        "path": [
+          {
+            "x": 55,
+            "y": 70
+          },
+          {
+            "x": 106,
+            "y": 164
+          },
+          {
+            "x": 476,
+            "y": 44
+          }
+        ],
+        "startedAt": 1779256156273,
+        "completedAt": 1779256168180
+      },
+      "lastTask": "把杯子移动到桌子右上角",
+      "lastExecutionResult": {
+        "success": true,
+        "status": "completed",
+        "message": "机器人已完成把杯子移动到桌子右上角",
+        "finishedAt": 1779256168180
+      }
+    }
+  },
+  "success": true,
+  "failure_reason": null,
+  "finalized": true,
+  "data_quality": {
+    "sample_quality_score": 0.78,
+    "image_quality_score": 0.55,
+    "object_detection_quality_score": 0.8,
+    "spatial_mapping_quality_score": 0.82,
+    "task_plan_quality_score": 0.84,
+    "execution_quality_score": 0.9,
+    "known_issues": [],
+    "is_training_ready": true
+  },
+  "failure_sample": {
+    "is_failure_sample": false,
+    "failure_type": null,
+    "failure_reason": null,
+    "recoverable": null,
+    "recommended_fix": null
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260520054928_1497dfce",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "desktop",
+    "object_count": 6,
+    "main_objects": [
+      "杯子",
+      "书",
+      "苹果",
+      "篮子",
+      "纸团",
+      "笔"
+    ],
+    "success": true,
+    "failure_type": null,
+    "quality_score": 0.78,
+    "is_training_ready": true,
+    "created_at": "2026-05-20T05:49:28.186Z"
+  }
+}

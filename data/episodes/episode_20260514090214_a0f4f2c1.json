@@ -1,0 +1,79 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260514090214_a0f4f2c1",
+  "created_at": "2026-05-14T09:02:14.990Z",
+  "updated_at": "2026-05-14T09:02:14.990Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778749332506_cf51236d.jpg",
+  "multimodal_perception_result": {
+    "success": true,
+    "taskId": "vision_1778749332505_51d1413e",
+    "imageHash": "9191c52654a70d37952f82f8ad39b223f04485deb716c8e4c8ccc55ef7db0e79",
+    "cached": false,
+    "sceneId": "uploaded_1778749334292",
+    "mode": "uploaded-image",
+    "model": "mimo-v2-flash",
+    "fallback": false,
+    "fallbackReason": null,
+    "uploadedImagePath": "data/uploads/upload_1778749332506_cf51236d.jpg",
+    "sceneDescription": "视觉模型未识别到可操作物体。",
+    "objects": [],
+    "annotations": [],
+    "summary": "真实视觉模型已识别到 0 个具体物体"
+  },
+  "objects": [],
+  "target_position": null,
+  "task_plan_steps": [],
+  "simulation_action_steps": [],
+  "execution_result": null,
+  "success": false,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.3,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 0.1,
+    "spatial_mapping_quality_score": 0.1,
+    "task_plan_quality_score": 0.15,
+    "execution_quality_score": 0.25,
+    "known_issues": [
+      "未记录识别物体",
+      "缺少任务规划步骤",
+      "缺少仿真动作步骤",
+      "缺少执行结果",
+      "任务执行未成功"
+    ],
+    "is_training_ready": false
+  },
+  "failure_sample": {
+    "is_failure_sample": true,
+    "failure_type": "planning_error",
+    "failure_reason": "样本未成功完成或缺少执行结果。",
+    "recoverable": true,
+    "recommended_fix": "补充明确任务目标，重新生成动作计划。"
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260514090214_a0f4f2c1",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 0,
+    "main_objects": [],
+    "task_type": "move_object",
+    "success": false,
+    "failure_type": "planning_error",
+    "quality_score": 0.3,
+    "is_training_ready": false,
+    "created_at": "2026-05-14T09:02:14.990Z",
+    "duration_ms": 0
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-14T09:02:14.990Z",
+      "data": {
+        "sceneDescription": "视觉模型未识别到可操作物体。",
+        "summary": "真实视觉模型已识别到 0 个具体物体"
+      }
+    }
+  ],
+  "finalized": false
+}

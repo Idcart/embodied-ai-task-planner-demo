@@ -1,0 +1,651 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260514080921_e97a68a0",
+  "created_at": "2026-05-14T08:09:21.324Z",
+  "updated_at": "2026-05-14T08:09:21.324Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778746139374_9ab8a3ef.webp",
+  "multimodal_perception_result": {
+    "success": true,
+    "sceneId": "uploaded_1778746161297",
+    "mode": "uploaded-image",
+    "model": "mimo-v2.5",
+    "uploadedImagePath": "data/uploads/upload_1778746139374_9ab8a3ef.webp",
+    "sceneDescription": "一个明亮整洁的儿童卧室，墙面为浅蓝色。左侧是一张单人床，床上铺着黑白条纹被子，床头靠墙，旁边有白色衣柜。床前地板上有一个足球。床尾有抽屉柜。右侧是白色书桌和椅子，书桌旁有收纳架，墙上挂着多幅儿童画作。床上有一个熊猫玩偶。",
+    "objects": [
+      {
+        "id": "object_1",
+        "name": "足球",
+        "type": "ball",
+        "icon": "ball",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_center",
+          "xPercent": 38,
+          "yPercent": 91
+        },
+        "confidence": 0.95,
+        "operable": true,
+        "description": "一个黑白相间的足球，放置在床前的木地板上。",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "球形易滚动，抓取时需防止滑脱。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 228,
+          "y": 364
+        },
+        "bbox": {
+          "x": 31,
+          "y": 82,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_2",
+        "name": "熊猫玩偶",
+        "type": "toy",
+        "icon": "toy",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 62,
+          "yPercent": 45
+        },
+        "confidence": 0.98,
+        "operable": true,
+        "description": "一个黑白相间、戴着蓝色领结的熊猫毛绒玩偶，坐在床尾。",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "毛绒玩具柔软，抓取时需确保稳定抓握。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 372,
+          "y": 180
+        },
+        "bbox": {
+          "x": 55,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_3",
+        "name": "条纹被子",
+        "type": "blanket",
+        "icon": "blanket",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center",
+          "xPercent": 45,
+          "yPercent": 58
+        },
+        "confidence": 0.92,
+        "operable": true,
+        "description": "黑白条纹图案的被子，铺在床上。",
+        "affordance": [
+          "movable",
+          "placeable"
+        ],
+        "risk": "大面积织物，抓取时需选择合适边缘，避免褶皱堆积。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 270,
+          "y": 232
+        },
+        "bbox": {
+          "x": 38,
+          "y": 51,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_4",
+        "name": "床头柜",
+        "type": "cabinet",
+        "icon": "cabinet",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_left",
+          "xPercent": 22,
+          "yPercent": 78
+        },
+        "confidence": 0.9,
+        "operable": true,
+        "description": "床尾下方的白色抽屉柜，带有可抽拉的抽屉。",
+        "affordance": [
+          "container",
+          "placeable"
+        ],
+        "risk": "抽屉式柜子，拉出时需注意前方空间是否足够。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 132,
+          "y": 312
+        },
+        "bbox": {
+          "x": 15,
+          "y": 71,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_5",
+        "name": "椅子",
+        "type": "chair",
+        "icon": "chair",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 78,
+          "yPercent": 62
+        },
+        "confidence": 0.95,
+        "operable": true,
+        "description": "一把浅绿色的可旋转儿童椅，带有白色支架和滚轮，放在书桌前。",
+        "affordance": [
+          "movable",
+          "placeable"
+        ],
+        "risk": "带滚轮的椅子，移动时需注意方向和速度，防止碰撞。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 468,
+          "y": 248
+        },
+        "bbox": {
+          "x": 71,
+          "y": 55,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_6",
+        "name": "书桌",
+        "type": "desk",
+        "icon": "desk",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "center_right",
+          "xPercent": 88,
+          "yPercent": 52
+        },
+        "confidence": 0.88,
+        "operable": false,
+        "description": "靠墙的白色书桌，桌面有学习用品。",
+        "affordance": [
+          "placeable"
+        ],
+        "risk": "大型固定家具，不适合移动。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 528,
+          "y": 208
+        },
+        "bbox": {
+          "x": 81,
+          "y": 45,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_7",
+        "name": "收纳架",
+        "type": "shelf",
+        "icon": "shelf",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "bottom_right",
+          "xPercent": 95,
+          "yPercent": 68
+        },
+        "confidence": 0.85,
+        "operable": false,
+        "description": "书桌旁的白色开放式收纳架，里面有多个收纳盒。",
+        "affordance": [
+          "container"
+        ],
+        "risk": "落地式收纳架，结构稳定，但存放物品较多，移动困难。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 570,
+          "y": 272
+        },
+        "bbox": {
+          "x": 82,
+          "y": 61,
+          "width": 14,
+          "height": 14
+        }
+      },
+      {
+        "id": "object_8",
+        "name": "画作",
+        "type": "picture",
+        "icon": "picture",
+        "color": "#0ea5a3",
+        "position": {
+          "region": "top_right",
+          "xPercent": 84,
+          "yPercent": 22
+        },
+        "confidence": 0.9,
+        "operable": true,
+        "description": "挂在墙上的儿童画作，描绘了彩色风景。",
+        "affordance": [
+          "pickable",
+          "placeable"
+        ],
+        "risk": "墙面装饰物，取下时需注意固定方式，防止掉落。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 504,
+          "y": 88
+        },
+        "bbox": {
+          "x": 77,
+          "y": 15,
+          "width": 14,
+          "height": 14
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "object_1",
+        "label": "足球",
+        "bbox": {
+          "x": 31,
+          "y": 82,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.95
+      },
+      {
+        "id": "object_2",
+        "label": "熊猫玩偶",
+        "bbox": {
+          "x": 55,
+          "y": 38,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.98
+      },
+      {
+        "id": "object_3",
+        "label": "条纹被子",
+        "bbox": {
+          "x": 38,
+          "y": 51,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.92
+      },
+      {
+        "id": "object_4",
+        "label": "床头柜",
+        "bbox": {
+          "x": 15,
+          "y": 71,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      },
+      {
+        "id": "object_5",
+        "label": "椅子",
+        "bbox": {
+          "x": 71,
+          "y": 55,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.95
+      },
+      {
+        "id": "object_6",
+        "label": "书桌",
+        "bbox": {
+          "x": 81,
+          "y": 45,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.88
+      },
+      {
+        "id": "object_7",
+        "label": "收纳架",
+        "bbox": {
+          "x": 82,
+          "y": 61,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.85
+      },
+      {
+        "id": "object_8",
+        "label": "画作",
+        "bbox": {
+          "x": 77,
+          "y": 15,
+          "width": 14,
+          "height": 14
+        },
+        "confidence": 0.9
+      }
+    ],
+    "summary": "真实视觉模型已识别到 8 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "object_1",
+      "name": "足球",
+      "type": "ball",
+      "bbox_2d": {
+        "x": 31,
+        "y": 82,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "bottom_center",
+        "xPercent": 38,
+        "yPercent": 91
+      },
+      "position_3d": {
+        "x": -1.2,
+        "y": 0.34,
+        "z": 4.1
+      },
+      "current_region": "bottom_center",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "球形易滚动，抓取时需防止滑脱。",
+      "confidence": 0.95
+    },
+    {
+      "id": "object_2",
+      "name": "熊猫玩偶",
+      "type": "toy",
+      "bbox_2d": {
+        "x": 55,
+        "y": 38,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 62,
+        "yPercent": 45
+      },
+      "position_3d": {
+        "x": 1.2,
+        "y": 0.34,
+        "z": -0.5
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "毛绒玩具柔软，抓取时需确保稳定抓握。",
+      "confidence": 0.98
+    },
+    {
+      "id": "object_3",
+      "name": "条纹被子",
+      "type": "blanket",
+      "bbox_2d": {
+        "x": 38,
+        "y": 51,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 45,
+        "yPercent": 58
+      },
+      "position_3d": {
+        "x": -0.5,
+        "y": 0.34,
+        "z": 0.8
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "movable",
+        "placeable"
+      ],
+      "risk": "大面积织物，抓取时需选择合适边缘，避免褶皱堆积。",
+      "confidence": 0.92
+    },
+    {
+      "id": "object_4",
+      "name": "床头柜",
+      "type": "cabinet",
+      "bbox_2d": {
+        "x": 15,
+        "y": 71,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "bottom_left",
+        "xPercent": 22,
+        "yPercent": 78
+      },
+      "position_3d": {
+        "x": -2.8,
+        "y": 0.34,
+        "z": 2.8
+      },
+      "current_region": "bottom_left",
+      "operable": true,
+      "affordance": [
+        "container",
+        "placeable"
+      ],
+      "risk": "抽屉式柜子，拉出时需注意前方空间是否足够。",
+      "confidence": 0.9
+    },
+    {
+      "id": "object_5",
+      "name": "椅子",
+      "type": "chair",
+      "bbox_2d": {
+        "x": 71,
+        "y": 55,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 78,
+        "yPercent": 62
+      },
+      "position_3d": {
+        "x": 2.8,
+        "y": 0.34,
+        "z": 1.2
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "movable",
+        "placeable"
+      ],
+      "risk": "带滚轮的椅子，移动时需注意方向和速度，防止碰撞。",
+      "confidence": 0.95
+    },
+    {
+      "id": "object_6",
+      "name": "书桌",
+      "type": "desk",
+      "bbox_2d": {
+        "x": 81,
+        "y": 45,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 88,
+        "yPercent": 52
+      },
+      "position_3d": {
+        "x": 3.8,
+        "y": 0.34,
+        "z": 0.2
+      },
+      "current_region": "center_right",
+      "operable": false,
+      "affordance": [
+        "placeable"
+      ],
+      "risk": "大型固定家具，不适合移动。",
+      "confidence": 0.88
+    },
+    {
+      "id": "object_7",
+      "name": "收纳架",
+      "type": "shelf",
+      "bbox_2d": {
+        "x": 82,
+        "y": 61,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "bottom_right",
+        "xPercent": 95,
+        "yPercent": 68
+      },
+      "position_3d": {
+        "x": 4.5,
+        "y": 0.34,
+        "z": 1.8
+      },
+      "current_region": "bottom_right",
+      "operable": false,
+      "affordance": [
+        "container"
+      ],
+      "risk": "落地式收纳架，结构稳定，但存放物品较多，移动困难。",
+      "confidence": 0.85
+    },
+    {
+      "id": "object_8",
+      "name": "画作",
+      "type": "picture",
+      "bbox_2d": {
+        "x": 77,
+        "y": 15,
+        "width": 14,
+        "height": 14
+      },
+      "position_2d": {
+        "region": "top_right",
+        "xPercent": 84,
+        "yPercent": 22
+      },
+      "position_3d": {
+        "x": 3.4,
+        "y": 0.34,
+        "z": -2.8
+      },
+      "current_region": "top_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "placeable"
+      ],
+      "risk": "墙面装饰物，取下时需注意固定方式，防止掉落。",
+      "confidence": 0.9
+    }
+  ],
+  "target_position": null,
+  "task_plan_steps": [],
+  "simulation_action_steps": [],
+  "execution_result": null,
+  "success": false,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.63,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 0.96,
+    "spatial_mapping_quality_score": 0.9,
+    "task_plan_quality_score": 0.15,
+    "execution_quality_score": 0.25,
+    "known_issues": [
+      "缺少任务规划步骤",
+      "缺少仿真动作步骤",
+      "缺少执行结果",
+      "任务执行未成功"
+    ],
+    "is_training_ready": false
+  },
+  "failure_sample": {
+    "is_failure_sample": true,
+    "failure_type": "planning_error",
+    "failure_reason": "样本未成功完成或缺少执行结果。",
+    "recoverable": true,
+    "recommended_fix": "补充明确任务目标，重新生成动作计划。"
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260514080921_e97a68a0",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 8,
+    "main_objects": [
+      "足球",
+      "熊猫玩偶",
+      "条纹被子",
+      "床头柜",
+      "椅子",
+      "书桌"
+    ],
+    "task_type": "move_object",
+    "success": false,
+    "failure_type": "planning_error",
+    "quality_score": 0.63,
+    "is_training_ready": false,
+    "created_at": "2026-05-14T08:09:21.324Z",
+    "duration_ms": 0
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-14T08:09:21.325Z",
+      "data": {
+        "sceneDescription": "一个明亮整洁的儿童卧室，墙面为浅蓝色。左侧是一张单人床，床上铺着黑白条纹被子，床头靠墙，旁边有白色衣柜。床前地板上有一个足球。床尾有抽屉柜。右侧是白色书桌和椅子，书桌旁有收纳架，墙上挂着多幅儿童画作。床上有一个熊猫玩偶。",
+        "summary": "真实视觉模型已识别到 8 个具体物体"
+      }
+    }
+  ],
+  "finalized": false
+}

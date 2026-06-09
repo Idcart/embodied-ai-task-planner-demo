@@ -1,0 +1,304 @@
+{
+  "data_version": "EIRDS-0.1",
+  "episode_id": "episode_20260514085310_caad1317",
+  "created_at": "2026-05-14T08:53:10.149Z",
+  "updated_at": "2026-05-14T08:53:10.149Z",
+  "user_task_instruction": "把杯子移动到桌子右上角",
+  "uploaded_image_path": "data/uploads/upload_1778748781980_a35d7c49.jpg",
+  "multimodal_perception_result": {
+    "success": true,
+    "taskId": "vision_1778748781979_83c8a381",
+    "imageHash": "9191c52654a70d37952f82f8ad39b223f04485deb716c8e4c8ccc55ef7db0e79",
+    "cached": false,
+    "sceneId": "uploaded_1778748790019",
+    "mode": "uploaded-image",
+    "model": "mimo-v2-flash",
+    "fallback": true,
+    "fallbackReason": "视觉模型请求超过 8 秒，已中断本次识别。",
+    "uploadedImagePath": "data/uploads/upload_1778748781980_a35d7c49.jpg",
+    "sceneDescription": "视觉模型响应超时，系统已生成快速兜底桌面物体结果。",
+    "objects": [
+      {
+        "id": "fallback_cup_1",
+        "name": "杯子",
+        "type": "cup",
+        "icon": "cup",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 28,
+          "y": 43,
+          "width": 14,
+          "height": 18
+        },
+        "position": {
+          "region": "center_left",
+          "xPercent": 35,
+          "yPercent": 52
+        },
+        "confidence": 0.55,
+        "operable": true,
+        "description": "快速兜底识别出的可操作杯子",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "模型超时后的快速兜底结果，执行前建议人工确认。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 210,
+          "y": 208
+        }
+      },
+      {
+        "id": "fallback_book_1",
+        "name": "书",
+        "type": "book",
+        "icon": "book",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 44,
+          "y": 42,
+          "width": 22,
+          "height": 12
+        },
+        "position": {
+          "region": "center",
+          "xPercent": 55,
+          "yPercent": 48
+        },
+        "confidence": 0.5,
+        "operable": true,
+        "description": "快速兜底识别出的书本",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "模型超时后的快速兜底结果，执行前建议人工确认。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 330,
+          "y": 192
+        }
+      },
+      {
+        "id": "fallback_phone_1",
+        "name": "手机",
+        "type": "phone",
+        "icon": "phone",
+        "color": "#0ea5a3",
+        "bbox": {
+          "x": 64,
+          "y": 47,
+          "width": 12,
+          "height": 16
+        },
+        "position": {
+          "region": "center_right",
+          "xPercent": 70,
+          "yPercent": 55
+        },
+        "confidence": 0.48,
+        "operable": true,
+        "description": "快速兜底识别出的手机",
+        "affordance": [
+          "pickable",
+          "movable",
+          "placeable"
+        ],
+        "risk": "模型超时后的快速兜底结果，手机类物体需要轻抓轻放。",
+        "status": "detected",
+        "scenePosition": {
+          "x": 420,
+          "y": 220
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "fallback_cup_1",
+        "label": "杯子",
+        "bbox": {
+          "x": 28,
+          "y": 43,
+          "width": 14,
+          "height": 18
+        },
+        "confidence": 0.55
+      },
+      {
+        "id": "fallback_book_1",
+        "label": "书",
+        "bbox": {
+          "x": 44,
+          "y": 42,
+          "width": 22,
+          "height": 12
+        },
+        "confidence": 0.5
+      },
+      {
+        "id": "fallback_phone_1",
+        "label": "手机",
+        "bbox": {
+          "x": 64,
+          "y": 47,
+          "width": 12,
+          "height": 16
+        },
+        "confidence": 0.48
+      }
+    ],
+    "summary": "真实视觉模型已识别到 3 个具体物体"
+  },
+  "objects": [
+    {
+      "id": "fallback_cup_1",
+      "name": "杯子",
+      "type": "cup",
+      "bbox_2d": {
+        "x": 28,
+        "y": 43,
+        "width": 14,
+        "height": 18
+      },
+      "position_2d": {
+        "region": "center_left",
+        "xPercent": 35,
+        "yPercent": 52
+      },
+      "position_3d": {
+        "x": -1.5,
+        "y": 0.34,
+        "z": 0.2
+      },
+      "current_region": "center_left",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "模型超时后的快速兜底结果，执行前建议人工确认。",
+      "confidence": 0.55
+    },
+    {
+      "id": "fallback_book_1",
+      "name": "书",
+      "type": "book",
+      "bbox_2d": {
+        "x": 44,
+        "y": 42,
+        "width": 22,
+        "height": 12
+      },
+      "position_2d": {
+        "region": "center",
+        "xPercent": 55,
+        "yPercent": 48
+      },
+      "position_3d": {
+        "x": 0.5,
+        "y": 0.34,
+        "z": -0.2
+      },
+      "current_region": "center",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "模型超时后的快速兜底结果，执行前建议人工确认。",
+      "confidence": 0.5
+    },
+    {
+      "id": "fallback_phone_1",
+      "name": "手机",
+      "type": "phone",
+      "bbox_2d": {
+        "x": 64,
+        "y": 47,
+        "width": 12,
+        "height": 16
+      },
+      "position_2d": {
+        "region": "center_right",
+        "xPercent": 70,
+        "yPercent": 55
+      },
+      "position_3d": {
+        "x": 2,
+        "y": 0.34,
+        "z": 0.5
+      },
+      "current_region": "center_right",
+      "operable": true,
+      "affordance": [
+        "pickable",
+        "movable",
+        "placeable"
+      ],
+      "risk": "模型超时后的快速兜底结果，手机类物体需要轻抓轻放。",
+      "confidence": 0.48
+    }
+  ],
+  "target_position": null,
+  "task_plan_steps": [],
+  "simulation_action_steps": [],
+  "execution_result": null,
+  "success": false,
+  "failure_reason": null,
+  "data_quality": {
+    "sample_quality_score": 0.6,
+    "image_quality_score": 0.9,
+    "object_detection_quality_score": 0.78,
+    "spatial_mapping_quality_score": 0.9,
+    "task_plan_quality_score": 0.15,
+    "execution_quality_score": 0.25,
+    "known_issues": [
+      "缺少任务规划步骤",
+      "缺少仿真动作步骤",
+      "缺少执行结果",
+      "任务执行未成功"
+    ],
+    "is_training_ready": false
+  },
+  "failure_sample": {
+    "is_failure_sample": true,
+    "failure_type": "planning_error",
+    "failure_reason": "样本未成功完成或缺少执行结果。",
+    "recoverable": true,
+    "recommended_fix": "补充明确任务目标，重新生成动作计划。"
+  },
+  "episode_summary": {
+    "episode_id": "episode_20260514085310_caad1317",
+    "task_description": "把杯子移动到桌子右上角",
+    "scene_type": "uploaded_image_desktop",
+    "object_count": 3,
+    "main_objects": [
+      "杯子",
+      "书",
+      "手机"
+    ],
+    "task_type": "move_object",
+    "success": false,
+    "failure_type": "planning_error",
+    "quality_score": 0.6,
+    "is_training_ready": false,
+    "created_at": "2026-05-14T08:53:10.149Z",
+    "duration_ms": 0
+  },
+  "stages": [
+    {
+      "stage": "perception_completed",
+      "timestamp": "2026-05-14T08:53:10.149Z",
+      "data": {
+        "sceneDescription": "视觉模型响应超时，系统已生成快速兜底桌面物体结果。",
+        "summary": "真实视觉模型已识别到 3 个具体物体"
+      }
+    }
+  ],
+  "finalized": false
+}
